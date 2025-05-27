@@ -7,7 +7,7 @@
     <title>Optik | @yield('title')</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="AdminLTE v4 | Dashboard" />
+    <meta name="title" content="SimOptik | Dashboard" />
     <meta name="author" content="ColorlibHQ" />
     <meta
         name="description"
@@ -130,7 +130,7 @@
                 <!--begin::Brand Link-->
                 <a href="{{ route('dashboard') }}" class="brand-link">
                     <!--begin::Brand Text-->
-                    <span class="brand-text fw-light">Optik.ku</span>
+                    <span class="brand-text fw-light">SimOptik</span>
                     <!--end::Brand Text-->
                 </a>
                 <!--end::Brand Link-->
@@ -212,7 +212,7 @@
             <!--begin::Copyright-->
             <strong>
                 Copyright &copy; 2025&nbsp;
-                <a href="#" class="text-decoration-none">Optik.ku</a>.
+                <a href="#" class="text-decoration-none">SimOptik</a>.
             </strong>
             All rights reserved.
             <!--end::Copyright-->

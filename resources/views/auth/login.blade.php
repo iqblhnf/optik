@@ -7,7 +7,7 @@
     <title>Optik | Login Page</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="AdminLTE 4 | Login Page" />
+    <meta name="title" content="SimOptik | Login Page" />
     <meta name="author" content="ColorlibHQ" />
     <meta
         name="description"
