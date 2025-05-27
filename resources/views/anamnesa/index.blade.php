@@ -1,0 +1,89 @@
+@extends('layouts.app')
+
+@section('title', 'Anamnesa')
+
+@section('content')
+@if(session('success'))
+<div class="container mt-3">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+@endif
+
+<div class="container-fluid">
+    <div class="card card-primary card-outline mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="card-title">Anamnesa</h3>
+            <a href="{{ route('anamnesa.create') }}" class="btn btn-sm btn-primary">
+                <i class="bi bi-plus-circle"></i> Tambah
+            </a>
+        </div>
+        <div class="card-body">
+            <div style="overflow-x: auto;">
+                <table id="anamnesa" class="table table-bordered table-hover align-middle nowrap" style="width:100%">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Pasien</th>
+                            <th>Jauh</th>
+                            <th>Dekat</th>
+                            <th>Genetik</th>
+                            <th>Riwayat</th>
+                            <th>Lainnya</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($data as $index => $item)
+                        <tr>
+                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $item->pasien->nama ?? '-' }}</td>
+                            <td>{{ $item->jauh }}</td>
+                            <td>{{ $item->dekat }}</td>
+                            <td>{{ $item->gen }}</td>
+                            <td>{{ $item->riwayat }}</td>
+                            <td>{{ $item->lainnya }}</td>
+                            <td>
+                                <a href="{{ route('anamnesa.edit', $item->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></a>
+                                <form action="{{ route('anamnesa.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">Belum ada data</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Gaya dan Script DataTables --}}
+<style>
+    table.dataTable td {
+        white-space: nowrap;
+    }
+
+    div.dataTables_wrapper {
+        width: 100%;
+        overflow-x: auto;
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        $('#anamnesa').DataTable({
+            scrollX: true,
+            autoWidth: false
+        });
+    });
+</script>
+@endsection
