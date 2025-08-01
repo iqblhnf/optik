@@ -40,7 +40,7 @@
                         <p>Pengguna Sistem</p>
                     </div>
                     <i class="bi bi-people-fill small-box-icon"></i>
-                    <a href="#" class="small-box-footer link-light link-underline-opacity-0">
+                    <a href="{{ route('petugas.index') }}" class="small-box-footer link-light link-underline-opacity-0">
                         Lihat Detail <i class="bi bi-arrow-right"></i>
                     </a>
                 </div>

@@ -18,10 +18,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_pasien');
             $table->foreign('id_pasien')->references('id')->on('pasien')->onDelete('cascade');
 
-            $table->enum('jauh', ['Buram', 'Berbayang', 'Jelas']);
-            $table->enum('dekat', ['Buram', 'Berbayang', 'Jelas']);
-            $table->enum('gen', ['Pengguna Kacamata', 'Tidak']);
-            $table->enum('riwayat', ['Hipertensi', 'Diabetes', 'Vertigo']);
+            $table->string('jauh');
+            $table->string('dekat');
+            $table->string('gen');
+            $table->string('riwayat');
             $table->text('lainnya')->nullable();
 
             $table->timestamps();

@@ -16,24 +16,30 @@ return new class extends Migration
             
             $table->unsignedBigInteger('id_anamnesa');
             $table->foreign('id_anamnesa')->references('id')->on('anamnesa')->onDelete('cascade');
+            
+            $table->unsignedBigInteger('id_user');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
 
-            $table->string('od_sph');
-            $table->string('od_cyl');
-            $table->string('od_axis');
-            $table->string('od_add');
-            $table->string('od_prisma');
-            $table->string('od_base');
+            $table->string('od_sph')->nullable();
+            $table->string('od_cyl')->nullable();
+            $table->string('od_axis')->nullable();
+            $table->string('od_add')->nullable();
+            $table->string('od_prisma')->nullable();
+            $table->string('od_base')->nullable();
 
-            $table->string('os_sph');
-            $table->string('os_cyl');
-            $table->string('os_axis');
-            $table->string('os_add');
-            $table->string('os_prisma');
-            $table->string('os_base');
+            $table->string('os_sph')->nullable();
+            $table->string('os_cyl')->nullable();
+            $table->string('os_axis')->nullable();
+            $table->string('os_add')->nullable();
+            $table->string('os_prisma')->nullable();
+            $table->string('os_base')->nullable();
             
             $table->string('binoculer_pd');
-            $table->enum('status_kacamata_lama', ['tidak dibawa', 'rusak', 'hilang', 'sudah tidak enak']);
-            $table->string('keterangan_kacamata_lama');
+            $table->string('status_kacamata_lama');
+            $table->string('keterangan_kacamata_lama')->nullable();
+            
+            $table->datetime('waktu_mulai');
+            $table->datetime('waktu_selesai');
             $table->timestamps();
         });
     }

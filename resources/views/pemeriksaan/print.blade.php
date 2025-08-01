@@ -16,6 +16,7 @@
             padding: 10px;
             margin: 0 auto;
             background: #fff;
+            position: relative; /* untuk posisi absolute footer kiri bawah */
         }
 
         .container {
@@ -50,6 +51,14 @@
             text-align: center;
             line-height: 20px;
             margin-right: 2px;
+        }
+
+        /* Tambahan untuk pojok kiri bawah */
+        .footer-left {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -276,6 +285,12 @@
                     <p style="margin: 0;">Tanda Tangan RO</p>
                 </div>
             </div>
+        </div>
+
+        <!-- Tambahan Footer Nama Petugas di pojok kiri bawah -->
+        <div class="footer-left">
+            <p style="margin: 0;">Nama Petugas</p>
+            <p style="margin: 0;">{{ $pemeriksaan->petugas->kode_user ?? '-' }}</p>
         </div>
     </div>
 

@@ -151,6 +151,15 @@
                                 <p>Dashboard</p>
                             </a>
                         </li>
+                        @if(auth()->check() && auth()->user()->role === 'admin')
+                        <li class="nav-item">
+                            <a href="{{ route('petugas.index') }}"
+                                class="nav-link {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-person-gear"></i>
+                                <p>Petugas</p>
+                            </a>
+                        </li>
+                        @endif
                         <li class="nav-item">
                             <a href="{{ route('pasien.index') }}" class="nav-link {{ request()->routeIs('pasien.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-person"></i>
@@ -246,7 +255,8 @@
     <script>
         $(document).ready(function() {
             $('.select2').select2({
-                placeholder: "Pilih item",
+                tags: true,
+                placeholder: "Pilih Item",
                 allowClear: true
             });
         });

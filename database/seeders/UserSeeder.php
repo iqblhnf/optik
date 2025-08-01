@@ -10,10 +10,13 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        // Admin
         User::create([
             'name' => 'Admin Optik',
             'username' => 'adminoptik',
-            'password' => Hash::make('password123'), // ganti sesuai keinginan
+            'kode_user' => 'AO',
+            'password' => Hash::make('password123'),
+            'role' => 'admin',
         ]);
     }
 }

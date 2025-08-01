@@ -13,6 +13,7 @@ class Pemeriksaan extends Model
 
     protected $fillable = [
         'id_anamnesa',
+        'id_user',
         'od_sph',
         'od_cyl',
         'od_axis',
@@ -27,8 +28,16 @@ class Pemeriksaan extends Model
         'os_base',
         'binoculer_pd',
         'status_kacamata_lama',
-        'keterangan_kacamata_lama'
+        'keterangan_kacamata_lama',
+        'waktu_mulai',
+        'waktu_selesai'
     ];
+
+    protected $casts = [
+        'waktu_mulai' => 'datetime',
+        'waktu_selesai' => 'datetime',
+    ];
+
 
     public function anamnesa()
     {
@@ -46,5 +55,10 @@ class Pemeriksaan extends Model
             'id_anamnesa',  // FK Pemeriksaan ke Anamnesa
             'id_pasien'     // FK Anamnesa ke Pasien
         );
+    }
+
+    public function petugas()
+    {
+        return $this->belongsTo(User::class, 'id_user');
     }
 }
