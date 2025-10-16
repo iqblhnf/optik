@@ -173,11 +173,74 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('laporan') }}" class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}">
-                                <i class="nav-icon bi bi-files"></i>
-                                <p>Laporan</p>
+                            <a href="{{ route('transaksi-penjualan.index') }}" class="nav-link {{ request()->routeIs('transaksi-penjualan.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-receipt"></i>
+                                <p>Penjualan</p>
                             </a>
                         </li>
+                        <li class="nav-item {{ request()->routeIs('laporan.*') || request()->routeIs('laporan.penjualan*') ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link {{ request()->routeIs('laporan.*') || request()->routeIs('laporan.penjualan*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-file"></i>
+                                <p>
+                                    Laporan
+                                    <i class="bi bi-chevron-right right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('laporan') }}" class="nav-link {{ request()->routeIs('laporan') ? 'active' : '' }}">
+                                        <i class="nav-icon bi bi-files"></i>
+                                        <p>Laporan Pemeriksaan</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('laporan.penjualan') }}" 
+                                    class="nav-link {{ request()->routeIs('laporan.penjualan*') ? 'active' : '' }}">
+                                        <i class="bi bi-file-earmark-bar-graph nav-icon"></i>
+                                        <p>Laporan Penjualan</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        
+                        <li class="nav-item {{ request()->routeIs('barang*') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->routeIs('barang*') ? 'active' : '' }}">
+                            <i class="nav-icon bi bi-box-seam"></i>
+                            <p>
+                                Barang
+                                <i class="bi bi-chevron-right right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+                                    <i class="bi bi-box-seam nav-icon"></i>
+                                    <p>Data Barang</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('barang-masuk.index') }}" class="nav-link {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}">
+                                    <i class="bi bi-box-arrow-in-down nav-icon"></i>
+                                    <p>Barang Masuk</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('barang-keluar.index') }}" class="nav-link {{ request()->routeIs('barang-keluar.*') ? 'active' : '' }}">
+                                    <i class="bi bi-box-arrow-up nav-icon"></i>
+                                    <p>Barang Keluar</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('stok.index') }}" class="nav-link {{ request()->routeIs('stok.index') ? 'active' : '' }}">
+                                    <i class="nav-icon bi bi-clipboard-data"></i>
+                                    <p>Rekap Stok</p>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
                     </ul>
                     <!--end::Sidebar Menu-->
                 </nav>

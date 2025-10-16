@@ -7,6 +7,14 @@ use App\Http\Controllers\PasienController;
 use App\Http\Controllers\PemeriksaanController;
 use App\Http\Controllers\PetugasController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BarangController;
+use App\Http\Controllers\BarangMasukController;
+use App\Http\Controllers\BarangKeluarController;
+use App\Http\Controllers\StokController;
+use App\Http\Controllers\TransaksiPenjualanController;
+use App\Http\Controllers\LaporanController;
+
+
 
 Route::middleware(['guest'])->group(function () {
 
@@ -27,4 +35,14 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/pemeriksaan/riwayat/{id_pasien}', [PemeriksaanController::class, 'riwayat'])->name('pemeriksaan.riwayat');
     Route::get('/laporan', [PemeriksaanController::class, 'laporan'])->name('laporan');
     Route::get('/pemeriksaan/{id}/print', [PemeriksaanController::class, 'print'])->name('pemeriksaan.print');
+    Route::resource('barang', BarangController::class);
+    Route::resource('barang-masuk', BarangMasukController::class)->only(['index','store','destroy']);
+    Route::resource('barang-keluar', BarangKeluarController::class)->only(['index','store','destroy']);
+    Route::get('/stok', [StokController::class, 'index'])->name('stok.index');
+    Route::resource('transaksi-penjualan', TransaksiPenjualanController::class);
+
+    Route::get('laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
+    Route::get('laporan/penjualan/cetak', [LaporanController::class, 'cetakPenjualan'])->name('laporan.penjualan.cetak');
+
+
 });
