@@ -208,7 +208,7 @@
                         <a href="#" class="nav-link {{ request()->routeIs('barang*') ? 'active' : '' }}">
                             <i class="nav-icon bi bi-box-seam"></i>
                             <p>
-                                Barang
+                                Manajemen Stok
                                 <i class="bi bi-chevron-right right"></i>
                             </p>
                         </a>
