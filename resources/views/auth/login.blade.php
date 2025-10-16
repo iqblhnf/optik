@@ -40,6 +40,11 @@
     <!--begin::Required Plugin(AdminLTE)-->
     <link rel="stylesheet" href="{{ asset('assets/css/adminlte.css') }}" />
     <!--end::Required Plugin(AdminLTE)-->
+    <style>
+.login-logo img {
+  filter: drop-shadow(0 0 8px rgba(0,255,255,0.5));
+}
+</style>
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -47,7 +52,11 @@
 <body class="login-page bg-body-secondary">
     <div class="login-box">
         <div class="login-logo">
-            <a href="/"><b>Website</b>&nbsp;Optik</a>
+             <img src="{{ asset('assets/img/logo.png') }}" 
+                alt="Logo Optik" 
+                style="width: 150px; height: auto; margin-bottom: 10px;">
+            <br>
+            <a href="/"><b>SIM</b>&nbsp;Optik</a>
         </div>
         <!-- /.login-logo -->
         <div class="card">
