@@ -94,14 +94,20 @@
                     @enderror
                 </div>
 
-                {{-- Input teks jika Ya --}}
-                <div class="mb-3 col-md-3" id="form-riwayat" style="display: none;">
+                {{-- Input select jika Ya --}}
+                <div class="mb-3 col-md-3" id="form-riwayat" style="display: {{ $adaRiwayat ? 'block' : 'none' }};">
                     <label class="form-label">Masukkan Riwayat Penyakit</label>
-                    <input type="text"
-                        name="riwayat"
+                    <select name="riwayat"
                         id="riwayat-input"
-                        class="form-control @error('riwayat') is-invalid @enderror"
-                        value="{{ old('riwayat', $riwayatValue ?? '') }}">
+                        class="form-select @error('riwayat') is-invalid @enderror">
+                        <option value="">-- Pilih Penyakit --</option>
+                        @foreach($penyakitOptions as $p)
+                        <option value="{{ $p }}" {{ (old('riwayat', $riwayatValue ?? '') == $p) ? 'selected' : '' }}>
+                            {{ $p }}
+                        </option>
+                        @endforeach
+                        <option value="Lainnya" {{ (old('riwayat', $riwayatValue ?? '') == 'Lainnya') ? 'selected' : '' }}>Lainnya</option>
+                    </select>
                     @error('riwayat') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
@@ -136,77 +142,133 @@
 
         {{-- Bagian OD / OS --}}
         <div class="row" id="bagian-od-os">
-            {{-- OD --}}
-            <div class="col-6">
-                <div class="card card-success card-outline">
-                    <div class="card-header">
-                        <h3 class="card-title">OD</h3>
-                    </div>
-                    <div class="card-body row">
-                        @foreach (['sph','cyl','axis','add','prisma','base'] as $field)
-                        <div class="mb-3 col-md-4">
-                            <label>{{ strtoupper($field) }}</label>
-                            @if ($field === 'axis')
-                            <div class="input-group">
-                                <input type="text"
-                                    name="od_{{ $field }}"
-                                    class="form-control"
-                                    value="{{ old("od_$field", $pemeriksaan->{'od_'.$field} ?? '') }}"
-                                    autocomplete="off">
-                                <span class="input-group-text">°</span>
-                            </div>
-                            @else
-                            <input type="text"
-                                name="od_{{ $field }}"
-                                class="form-control"
-                                value="{{ old("od_$field", $pemeriksaan->{'od_'.$field} ?? '') }}"
-                                autocomplete="off">
-                            @endif
 
-                            @error("od_$field")
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
+            {{-- ================= OD ================= --}}
+            <div class="col-md-6">
+                <div class="card card-success card-outline shadow-sm">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">OD (Oculus Dexter - Mata Kanan)</h5>
+                    </div>
+
+                    <div class="card-body">
+
+                        {{-- DISTANCE --}}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="fw-semibold text-success mb-3">DISTANCE (Jarak Jauh)</h6>
+                            <div class="row g-3">
+                                @foreach (['sph','cyl','axis','prisma','base'] as $field)
+                                <div class="col-md-4">
+                                    <label class="form-label">{{ strtoupper($field) }}</label>
+                                    @if ($field === 'axis')
+                                    <div class="input-group">
+                                        <input type="text"
+                                            name="od_{{ $field }}"
+                                            class="form-control"
+                                            value="{{ old("od_$field", $pemeriksaan->{'od_'.$field} ?? '') }}"
+                                            autocomplete="off">
+                                        <span class="input-group-text">°</span>
+                                    </div>
+                                    @else
+                                    <input type="text"
+                                        name="od_{{ $field }}"
+                                        class="form-control"
+                                        value="{{ old("od_$field", $pemeriksaan->{'od_'.$field} ?? '') }}"
+                                        autocomplete="off">
+                                    @endif
+
+                                    @error("od_$field")
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
-                        @endforeach
+
+                        {{-- NEAR --}}
+                        <div class="border rounded p-3 bg-light">
+                            <h6 class="fw-semibold text-success mb-3">NEAR (Jarak Dekat)</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">ADD</label>
+                                    <input type="text"
+                                        name="od_add"
+                                        class="form-control"
+                                        value="{{ old('od_add', $pemeriksaan->od_add ?? '') }}"
+                                        autocomplete="off">
+                                    @error('od_add')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
-            {{-- OS --}}
-            <div class="col-6">
-                <div class="card card-warning card-outline">
+            {{-- ================= OS ================= --}}
+            <div class="col-md-6">
+                <div class="card card-warning card-outline shadow-sm">
                     <div class="card-header">
-                        <h3 class="card-title">OS</h3>
+                        <h5 class="card-title mb-0">OS (Oculus Sinister - Mata Kiri)</h5>
                     </div>
-                    <div class="card-body row">
-                        @foreach (['sph','cyl','axis','add','prisma','base'] as $field)
-                        <div class="mb-3 col-md-4">
-                            <label>{{ strtoupper($field) }}</label>
-                            @if ($field === 'axis')
-                            <div class="input-group">
-                                <input type="text"
-                                    name="os_{{ $field }}"
-                                    class="form-control"
-                                    value="{{ old("os_$field", $pemeriksaan->{'os_'.$field} ?? '') }}"
-                                    autocomplete="off">
-                                <span class="input-group-text">°</span>
-                            </div>
-                            @else
-                            <input type="text"
-                                name="os_{{ $field }}"
-                                class="form-control"
-                                value="{{ old("os_$field", $pemeriksaan->{'os_'.$field} ?? '') }}"
-                                autocomplete="off">
-                            @endif
 
-                            @error("os_$field")
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
+                    <div class="card-body">
+
+                        {{-- DISTANCE --}}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="fw-semibold text-warning mb-3">DISTANCE (Jarak Jauh)</h6>
+                            <div class="row g-3">
+                                @foreach (['sph','cyl','axis','prisma','base'] as $field)
+                                <div class="col-md-4">
+                                    <label class="form-label">{{ strtoupper($field) }}</label>
+                                    @if ($field === 'axis')
+                                    <div class="input-group">
+                                        <input type="text"
+                                            name="os_{{ $field }}"
+                                            class="form-control"
+                                            value="{{ old("os_$field", $pemeriksaan->{'os_'.$field} ?? '') }}"
+                                            autocomplete="off">
+                                        <span class="input-group-text">°</span>
+                                    </div>
+                                    @else
+                                    <input type="text"
+                                        name="os_{{ $field }}"
+                                        class="form-control"
+                                        value="{{ old("os_$field", $pemeriksaan->{'os_'.$field} ?? '') }}"
+                                        autocomplete="off">
+                                    @endif
+
+                                    @error("os_$field")
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                @endforeach
+                            </div>
                         </div>
-                        @endforeach
+
+                        {{-- NEAR --}}
+                        <div class="border rounded p-3 bg-light">
+                            <h6 class="fw-semibold text-warning mb-3">NEAR (Jarak Dekat)</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">ADD</label>
+                                    <input type="text"
+                                        name="os_add"
+                                        class="form-control"
+                                        value="{{ old('os_add', $pemeriksaan->os_add ?? '') }}"
+                                        autocomplete="off">
+                                    @error('os_add')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
         </div>
 
         <div class="card card-secondary card-outline mt-3">
@@ -214,7 +276,7 @@
                 <h3 class="card-title">Lainnya</h3>
             </div>
             <div class="card-body row">
-                <div class="mb-3 col-md-4">
+                <div class="mb-3 col-md-6">
                     <label>BINOCULER PD</label>
                     <input type="text" name="binoculer_pd" class="form-control"
                         value="{{ old('binoculer_pd', $pemeriksaan->binoculer_pd ?? 'Tidak Ada') }}" autocomplete="off">
@@ -223,21 +285,31 @@
                     @enderror
                 </div>
 
-                <div class="mb-3 col-md-4">
-                    <label>Waktu Mulai</label>
-                    <input type="datetime-local" name="waktu_mulai" class="form-control" value="{{ old('waktu_mulai', $pemeriksaan->waktu_mulai) }}">
+                <div class="mb-3 col-md-6">
+                    <label for="waktu_mulai" class="form-label">Waktu Mulai</label>
+                    <div class="input-group">
+                        <input type="datetime-local"
+                            name="waktu_mulai"
+                            id="waktu_mulai"
+                            class="form-control"
+                            value="{{ old('waktu_mulai', $pemeriksaan->waktu_mulai) }}"
+                            readonly>
+                        <button class="btn btn-outline-secondary" type="button" id="btn-waktu" disabled>
+                            <i class="bi bi-clock-history"></i>
+                        </button>
+                    </div>
                     @error('waktu_mulai')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
                 </div>
 
-                <div class="mb-3 col-md-4">
+                <!-- <div class="mb-3 col-md-4">
                     <label>Waktu Selesai</label>
                     <input type="datetime-local" name="waktu_selesai" class="form-control" value="{{ old('waktu_selesai', $pemeriksaan->waktu_selesai) }}">
                     @error('waktu_selesai')
                     <div class="invalid-feedback d-block">{{ $message }}</div>
                     @enderror
-                </div>
+                </div> -->
 
                 <div class="mb-3 col-md-12">
                     <label>Keterangan Kacamata Lama</label>

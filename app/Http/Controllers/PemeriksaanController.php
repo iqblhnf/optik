@@ -8,6 +8,7 @@ use App\Models\Dekat;
 use App\Models\Genetik;
 use App\Models\Jauh;
 use App\Models\Pasien;
+use App\Models\Penyakit;
 use App\Models\StatusKacamataLama;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -66,6 +67,7 @@ class PemeriksaanController extends Controller
         $data['dekatOptions'] = Dekat::pluck('nama'); // Ambil isi tabel `dekat`
         $data['genetikOptions'] = Genetik::pluck('nama');
         $data['statusOptions'] = StatusKacamataLama::pluck('nama');
+        $data['penyakitOptions'] = Penyakit::pluck('nama');
 
         return view('pemeriksaan.create', compact('pasien') + $data);
     }
@@ -81,6 +83,10 @@ class PemeriksaanController extends Controller
         if (!$request->filled('binoculer_pd')) {
             $request->merge(['binoculer_pd' => 'Tidak Ada']);
         }
+
+        // 🔹 Waktu selesai otomatis diisi dengan waktu saat data disimpan
+        $now = now(); // waktu saat ini
+        $request->merge(['waktu_selesai' => $now->format('Y-m-d\TH:i')]);
 
         // Validasi gabungan
         $request->validate([
@@ -110,7 +116,7 @@ class PemeriksaanController extends Controller
             'status_kacamata_lama' => 'required|string|max:100',
             'keterangan_kacamata_lama' => 'nullable|string|max:255',
             'waktu_mulai'   => 'required|date_format:Y-m-d\TH:i',
-            'waktu_selesai' => 'required|date_format:Y-m-d\TH:i|after_or_equal:waktu_mulai',
+            // 'waktu_selesai' => 'required|date_format:Y-m-d\TH:i|after_or_equal:waktu_mulai',
         ]);
 
         // Simpan jika nilai tidak ada di tabel
@@ -149,7 +155,7 @@ class PemeriksaanController extends Controller
             'status_kacamata_lama' => $request->status_kacamata_lama,
             'keterangan_kacamata_lama' => $request->keterangan_kacamata_lama,
             'waktu_mulai' => $request->waktu_mulai,
-            'waktu_selesai' => $request->waktu_selesai,
+            'waktu_selesai' => $now,
         ]);
 
         return redirect()->route('pemeriksaan.index')->with('success', 'Data pemeriksaan berhasil ditambahkan.');
@@ -169,6 +175,7 @@ class PemeriksaanController extends Controller
         $dekatOptions = Dekat::pluck('nama');
         $genetikOptions = Genetik::pluck('nama');
         $statusOptions = StatusKacamataLama::pluck('nama');
+        $penyakitOptions = Penyakit::pluck('nama');
 
         return view('pemeriksaan.edit', compact(
             'pemeriksaan',
@@ -179,7 +186,8 @@ class PemeriksaanController extends Controller
             'jauhOptions',
             'dekatOptions',
             'genetikOptions',
-            'statusOptions'
+            'statusOptions',
+            'penyakitOptions'
         ));
     }
 
@@ -194,6 +202,10 @@ class PemeriksaanController extends Controller
         if (!$request->filled('binoculer_pd')) {
             $request->merge(['binoculer_pd' => 'Tidak Ada']);
         }
+
+        // 🔹 Isi otomatis waktu_selesai dengan waktu saat update disimpan
+        $now = now();
+        $request->merge(['waktu_selesai' => $now->format('Y-m-d\TH:i')]);
 
         $request->validate([
             // Validasi Anamnesa
@@ -261,10 +273,10 @@ class PemeriksaanController extends Controller
             'status_kacamata_lama' => $request->status_kacamata_lama,
             'keterangan_kacamata_lama' => $request->keterangan_kacamata_lama,
             'waktu_mulai' => $request->waktu_mulai,
-            'waktu_selesai' => $request->waktu_selesai,
+            'waktu_selesai' => $now,
         ]);
 
-        return redirect()->route('pemeriksaan.riwayat', $anamnesa->id_pasien)->with('success', 'Data pemeriksaan berhasil diperbarui.');
+        return redirect()->route('pemeriksaan.index')->with('success', 'Data pemeriksaan berhasil diperbarui.');
     }
 
     public function destroy(Pemeriksaan $pemeriksaan)

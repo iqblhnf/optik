@@ -28,5 +28,19 @@ class MasterSeeder extends Seeder
         foreach (['tidak dibawa', 'rusak', 'hilang', 'sudah tidak enak'] as $val) {
             DB::table('status_kacamata_lama')->insert(['nama' => $val]);
         }
+
+        // Daftar penyakit
+        foreach (
+            [
+                'Hipertensi',
+                'Glaukoma',
+                'Katarak',
+                'Diabetes',
+                'Pterygium',
+                'Pasca Operasi',
+            ] as $val
+        ) {
+            DB::table('penyakit')->insert(['nama' => $val]);
+        }
     }
 }

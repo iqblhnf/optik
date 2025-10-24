@@ -38,6 +38,13 @@ return new class extends Migration
             $table->string('nama'); // contoh: tidak dibawa, rusak, hilang, sudah tidak enak
             $table->timestamps();
         });
+
+        // Tabel penyakit
+        Schema::create('penyakit', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->timestamps();
+        });
     }
 
     /**

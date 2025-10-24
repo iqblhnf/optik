@@ -139,45 +139,46 @@
             <!--begin::Sidebar Wrapper-->
             <div class="sidebar-wrapper">
                 <nav class="mt-2">
-                    <!--begin::Sidebar Menu-->
-                    <ul
-                        class="nav sidebar-menu flex-column"
-                        data-lte-toggle="treeview"
-                        role="menu"
-                        data-accordion="false">
+                    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+
+                        <!-- Dashboard -->
                         <li class="nav-item">
                             <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-house"></i>
                                 <p>Dashboard</p>
                             </a>
                         </li>
+
+                        <!-- 🔹 Menu khusus ADMIN -->
                         @if(auth()->check() && auth()->user()->role === 'admin')
                         <li class="nav-item">
-                            <a href="{{ route('petugas.index') }}"
-                                class="nav-link {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
+                            <a href="{{ route('petugas.index') }}" class="nav-link {{ request()->routeIs('petugas.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-person-gear"></i>
                                 <p>Petugas</p>
                             </a>
                         </li>
-                        @endif
+
                         <li class="nav-item">
                             <a href="{{ route('pasien.index') }}" class="nav-link {{ request()->routeIs('pasien.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-person"></i>
                                 <p>Pasien</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a href="{{ route('pemeriksaan.index') }}" class="nav-link {{ request()->routeIs('pemeriksaan.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-eyeglasses"></i>
                                 <p>Pemeriksaan</p>
                             </a>
                         </li>
+
                         <li class="nav-item">
                             <a href="{{ route('transaksi-penjualan.index') }}" class="nav-link {{ request()->routeIs('transaksi-penjualan.*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-receipt"></i>
                                 <p>Penjualan</p>
                             </a>
                         </li>
+
                         <li class="nav-item {{ request()->routeIs('laporan.*') || request()->routeIs('laporan.penjualan*') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link {{ request()->routeIs('laporan.*') || request()->routeIs('laporan.penjualan*') ? 'active' : '' }}">
                                 <i class="nav-icon bi bi-file"></i>
@@ -194,8 +195,7 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('laporan.penjualan') }}" 
-                                    class="nav-link {{ request()->routeIs('laporan.penjualan*') ? 'active' : '' }}">
+                                    <a href="{{ route('laporan.penjualan') }}" class="nav-link {{ request()->routeIs('laporan.penjualan*') ? 'active' : '' }}">
                                         <i class="bi bi-file-earmark-bar-graph nav-icon"></i>
                                         <p>Laporan Penjualan</p>
                                     </a>
@@ -203,49 +203,97 @@
                             </ul>
                         </li>
 
-                        
                         <li class="nav-item {{ request()->routeIs('barang*') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->routeIs('barang*') ? 'active' : '' }}">
-                            <i class="nav-icon bi bi-box-seam"></i>
-                            <p>
-                                Manajemen Stok
-                                <i class="bi bi-chevron-right right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
-                                    <i class="bi bi-box-seam nav-icon"></i>
-                                    <p>Data Barang</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('barang-masuk.index') }}" class="nav-link {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}">
-                                    <i class="bi bi-box-arrow-in-down nav-icon"></i>
-                                    <p>Barang Masuk</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('barang-keluar.index') }}" class="nav-link {{ request()->routeIs('barang-keluar.*') ? 'active' : '' }}">
-                                    <i class="bi bi-box-arrow-up nav-icon"></i>
-                                    <p>Barang Keluar</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('stok.index') }}" class="nav-link {{ request()->routeIs('stok.index') ? 'active' : '' }}">
-                                    <i class="nav-icon bi bi-clipboard-data"></i>
-                                    <p>Rekap Stok</p>
-                                </a>
-                            </li>
+                            <a href="#" class="nav-link {{ request()->routeIs('barang*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-box-seam"></i>
+                                <p>
+                                    Manajemen Stok
+                                    <i class="bi bi-chevron-right right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+                                        <i class="bi bi-box-seam nav-icon"></i>
+                                        <p>Data Barang</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('barang-masuk.index') }}" class="nav-link {{ request()->routeIs('barang-masuk.*') ? 'active' : '' }}">
+                                        <i class="bi bi-box-arrow-in-down nav-icon"></i>
+                                        <p>Barang Masuk</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('barang-keluar.index') }}" class="nav-link {{ request()->routeIs('barang-keluar.*') ? 'active' : '' }}">
+                                        <i class="bi bi-box-arrow-up nav-icon"></i>
+                                        <p>Barang Keluar</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('stok.index') }}" class="nav-link {{ request()->routeIs('stok.index') ? 'active' : '' }}">
+                                        <i class="nav-icon bi bi-clipboard-data"></i>
+                                        <p>Rekap Stok</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
 
-                        </ul>
-                    </li>
+                        <!-- 🔹 Menu khusus PEMERIKSAAN -->
+                        @if(auth()->check() && auth()->user()->role === 'pemeriksaan')
+                        <li class="nav-item">
+                            <a href="{{ route('pasien.index') }}" class="nav-link {{ request()->routeIs('pasien.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-person"></i>
+                                <p>Pasien</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('pemeriksaan.index') }}" class="nav-link {{ request()->routeIs('pemeriksaan.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-eyeglasses"></i>
+                                <p>Pemeriksaan</p>
+                            </a>
+                        </li>
+                        @endif
+
+                        <!-- 🔹 Menu khusus PENJUALAN -->
+                        @if(auth()->check() && auth()->user()->role === 'penjualan')
+                        <li class="nav-item">
+                            <a href="{{ route('transaksi-penjualan.index') }}" class="nav-link {{ request()->routeIs('transaksi-penjualan.*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-receipt"></i>
+                                <p>Penjualan</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item {{ request()->routeIs('barang*') ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link {{ request()->routeIs('barang*') ? 'active' : '' }}">
+                                <i class="nav-icon bi bi-box-seam"></i>
+                                <p>
+                                    Manajemen Stok
+                                    <i class="bi bi-chevron-right right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
+                                        <i class="bi bi-box-seam nav-icon"></i>
+                                        <p>Data Barang</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('stok.index') }}" class="nav-link {{ request()->routeIs('stok.index') ? 'active' : '' }}">
+                                        <i class="nav-icon bi bi-clipboard-data"></i>
+                                        <p>Rekap Stok</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        @endif
 
                     </ul>
-                    <!--end::Sidebar Menu-->
                 </nav>
             </div>
-            <!--end::Sidebar Wrapper-->
+
         </aside>
         <!--end::Sidebar-->
         <!--begin::App Main-->
