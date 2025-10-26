@@ -274,12 +274,12 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a href="{{ route('barang.index') }}" class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
                                         <i class="bi bi-box-seam nav-icon"></i>
                                         <p>Data Barang</p>
                                     </a>
-                                </li>
+                                </li> -->
                                 <li class="nav-item">
                                     <a href="{{ route('stok.index') }}" class="nav-link {{ request()->routeIs('stok.index') ? 'active' : '' }}">
                                         <i class="nav-icon bi bi-clipboard-data"></i>
