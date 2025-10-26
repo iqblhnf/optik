@@ -31,6 +31,7 @@
                                     <th>Nama</th>
                                     <th>Username</th>
                                     <th>Inisial</th>
+                                    <th>Role</th>
                                     <th style="width: 15%">Aksi</th>
                                 </tr>
                             </thead>
@@ -41,6 +42,7 @@
                                     <td>{{ $petugas->name }}</td>
                                     <td>{{ $petugas->username }}</td>
                                     <td>{{ $petugas->kode_user }}</td>
+                                    <td>{{ ucfirst($petugas->role) }}</td>
                                     <td>
                                         <a href="{{ route('petugas.edit', $petugas->id) }}" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-square"></i>

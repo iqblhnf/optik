@@ -27,7 +27,7 @@ class PetugasController extends Controller
      */
     public function index()
     {
-        $data = User::where('role', 'petugas')
+        $data = User::whereIn('role', ['pemeriksaan', 'penjualan'])
             ->orderBy('name')
             ->get();
 
@@ -51,6 +51,7 @@ class PetugasController extends Controller
             'name' => 'required|string|max:100',
             'username' => 'required|string|max:50|unique:users,username',
             'password' => 'required|string|min:4|max:100',
+            'role' => 'required|in:pemeriksaan,penjualan',
         ]);
 
         // Generate kode_user unik
@@ -61,7 +62,7 @@ class PetugasController extends Controller
             'username' => $request->username,
             'kode_user' => $kodeUser,
             'password' => Hash::make($request->password), // Hash untuk keamanan
-            'role' => 'petugas', // Set role otomatis
+            'role' => $request->role, // Set role otomatis
         ]);
 
         return redirect()->route('petugas.index')->with('success', 'Data petugas berhasil ditambahkan.');
@@ -84,6 +85,7 @@ class PetugasController extends Controller
             'name' => 'required|string|max:100',
             'username' => 'required|string|max:50|unique:users,username,' . $petuga->id,
             'password' => 'nullable|string|min:4|max:100',
+            'role' => 'required|in:pemeriksaan,penjualan',
         ]);
 
         $petuga->name = $request->name;
@@ -94,7 +96,7 @@ class PetugasController extends Controller
         }
 
         // Pastikan role selalu petugas
-        $petuga->role = 'petugas';
+        $petuga->role = $request->role;
 
         // Jika nama berubah → generate kode baru unik
         if ($petuga->isDirty('name')) {

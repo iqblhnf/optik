@@ -33,6 +33,16 @@
                     <input type="password" name="password" class="form-control @error('password') is-invalid @enderror">
                     @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+
+                <div class="mb-3">
+                    <label for="role" class="form-label">Role</label>
+                    <select name="role" id="role" class="form-select @error('role') is-invalid @enderror">
+                        <option value="">-- Pilih Role --</option>
+                        <option value="pemeriksaan" {{ old('role', $petugas->role) == 'pemeriksaan' ? 'selected' : '' }}>Pemeriksaan</option>
+                        <option value="penjualan" {{ old('role', $petugas->role) == 'penjualan' ? 'selected' : '' }}>Penjualan</option>
+                    </select>
+                    @error('role') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
             </div>
 
             <div class="card-footer">
