@@ -9,6 +9,7 @@ use App\Models\Dekat;
 use App\Models\Genetik;
 use App\Models\Penyakit;
 use App\Models\Anamnesa;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -44,7 +45,6 @@ class PasienController extends Controller
             'jauh' => 'required',
             'dekat' => 'required',
             'gen' => 'required',
-            'ada_riwayat' => 'required',
             'riwayat' => 'nullable',
             'lainnya' => 'nullable',
         ]);

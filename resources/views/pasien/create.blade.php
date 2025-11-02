@@ -20,7 +20,7 @@
 
                 <div class="mb-3">
                     <label for="usia" class="form-label">Usia</label>
-                    <input type="text" name="usia" class="form-control @error('usia') is-invalid @enderror" value="{{ old('usia') }}">
+                    <input type="number" name="usia" class="form-control @error('usia') is-invalid @enderror" value="{{ old('usia') }}">
                     @error('usia') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
@@ -36,19 +36,19 @@
 
                 <div class="mb-3">
                     <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                    <input type="text" name="pekerjaan" class="form-control @error('pekerjaan') is-invalid @enderror" value="{{ old('pekerjaan') }}">
+                    <input type="text" name="pekerjaan" class="form-control @error('pekerjaan') is-invalid @enderror" value="{{ old('pekerjaan') }}" required>
                     @error('pekerjaan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="alamat" class="form-label">Alamat</label>
-                    <input type="text" name="alamat" class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat') }}">
+                    <input type="text" name="alamat" class="form-control @error('alamat') is-invalid @enderror" value="{{ old('alamat') }}" required>
                     @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
                     <label for="no_telp" class="form-label">No. Telepon</label>
-                    <input type="text" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror" value="{{ old('no_telp') }}">
+                    <input type="number" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror" value="{{ old('no_telp') }}" required>
                     @error('no_telp') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
             {{-- ✅ ANAMNESA --}}
@@ -67,7 +67,7 @@
             <div class="col-md-4 mb-3">
                 <label class="form-label">Jarak Jauh (👁️ Jauh)</label>
                 <select name="jauh" class="form-select select2 @error('jauh') is-invalid @enderror"
-                        data-placeholder="Pilih item">
+                        data-placeholder="Pilih item" required>
                     <option value=""></option>
                     @foreach($jauhOptions as $opt)
                         <option value="{{ $opt }}">{{ $opt }}</option>
@@ -79,7 +79,7 @@
             <div class="col-md-4 mb-3">
                 <label class="form-label">Jarak Dekat (👁️ Dekat)</label>
                 <select name="dekat" class="form-select select2 @error('dekat') is-invalid @enderror"
-                        data-placeholder="Pilih item">
+                        data-placeholder="Pilih item" required>
                     <option value=""></option>
                     @foreach($dekatOptions as $opt)
                         <option value="{{ $opt }}">{{ $opt }}</option>
@@ -91,7 +91,7 @@
             <div class="col-md-4 mb-3">
                 <label class="form-label">Genetik (Riwayat Mata Keluarga)</label>
                 <select name="gen" class="form-select select2 @error('gen') is-invalid @enderror"
-                        data-placeholder="Pilih item">
+                        data-placeholder="Pilih item" required>
                     <option value=""></option>
                     @foreach($genetikOptions as $opt)
                         <option value="{{ $opt }}">{{ $opt }}</option>
@@ -107,7 +107,7 @@
                 <label class="form-label">Riwayat Penyakit (bisa pilih lebih dari satu)</label>
 
                 <select name="riwayat[]" class="form-select select2 @error('riwayat') is-invalid @enderror"
-                        multiple data-placeholder="-- pilih riwayat --">
+                        multiple data-placeholder="-- pilih riwayat --" required>
                     
                     {{-- ✅ Tambahkan opsi TIDAK ADA --}}
 
