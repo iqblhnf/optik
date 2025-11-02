@@ -37,17 +37,17 @@ class PasienController extends Controller
     // Simpan data pasien baru
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'nama' => 'required',
-        //     'usia' => 'required',
-        //     'jenis_kelamin' => 'required',
-        //     'jauh' => 'required',
-        //     'dekat' => 'required',
-        //     'gen' => 'required',
-        //     'ada_riwayat' => 'required',
-        //     'riwayat' => 'nullable',
-        //     'lainnya' => 'nullable',
-        // ]);
+        $request->validate([
+            'nama' => 'required',
+            'usia' => 'required',
+            'jenis_kelamin' => 'required',
+            'jauh' => 'required',
+            'dekat' => 'required',
+            'gen' => 'required',
+            'ada_riwayat' => 'required',
+            'riwayat' => 'nullable',
+            'lainnya' => 'nullable',
+        ]);
 
         $pasien = Pasien::create($request->only(['nama','usia','jenis_kelamin','pekerjaan','alamat','no_telp']));
 

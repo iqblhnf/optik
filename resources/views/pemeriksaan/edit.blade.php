@@ -274,27 +274,43 @@
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // === FORMAT 2 ANGKA DI BELAKANG KOMA (kecuali AXIS) ===
-    function format2Decimal(input) {
+    function formatWithSign(input) {
         input.addEventListener("blur", function () {
-            let val = this.value.replace(",", ".");     // support input koma
-            if (val !== "" && !isNaN(val)) {
-                this.value = parseFloat(val).toFixed(2);  // format 2 decimal
+            let val = this.value.trim();
+
+            if (val === "") return;
+
+            // deteksi apakah ada tanda + atau -
+            const sign = val.startsWith("+") ? "+" :
+                         val.startsWith("-") ? "-" : "";
+
+            // hilangkan tanda dulu untuk proses angka
+            val = val.replace(",", ".").replace(/^[+-]/, "");
+
+            // cek apakah angka valid
+            if (/^\d*\.?\d+$/.test(val)) {
+                let formatted = parseFloat(val).toFixed(2);
+
+                // jika awalnya ada tanda + atau -, gabungkan kembali
+                if (sign) {
+                    this.value = sign + formatted;
+                } else {
+                    this.value = formatted;
+                }
             }
         });
     }
 
-    // Ambil semua input yang diawali dengan od_, os_, pt_od_, pt_os_
     document.querySelectorAll("input[name^='od_'], input[name^='os_'], input[name^='pt_od_'], input[name^='pt_os_']")
         .forEach(function (input) {
 
-            // ✅ Abaikan AXIS (karena derajat)
+            // ❌ abaikan _axis (derajat)
             if (input.name.includes("_axis")) return;
 
-            // Selain AXIS → format decimal
-            format2Decimal(input);
+            formatWithSign(input);
         });
 });
 </script>
+
 
 @endsection

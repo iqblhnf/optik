@@ -85,6 +85,16 @@
             <p class="subtitle">{{ $set->alamat_optik ?? '' }}</p>
         </div>
 
+  {{-- HANDLE ERROR SERVER (AUTH / VALIDASI) --}}
+@if ($errors->any())
+    <div class="alert alert-danger d-flex align-items-center mb-3" role="alert"
+         style="border-radius: 10px;">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span>{{ $errors->first() }}</span>
+    </div>
+@endif
+
+
         {{-- Form Login --}}
         <form action="{{ route('login.proses') }}" method="POST">
             @csrf
