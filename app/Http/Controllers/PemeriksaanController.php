@@ -72,94 +72,70 @@ class PemeriksaanController extends Controller
         return view('pemeriksaan.create', compact('pasien') + $data);
     }
 
-    public function store(Request $request)
-    {
-        // Jika pilih "tidak", isi riwayat = "Tidak"
-        if ($request->input('ada_riwayat') === 'tidak') {
-            $request->merge(['riwayat' => 'Tidak']);
-        }
+   public function store(Request $request)
+{
+    // Waktu selesai otomatis
+    $now = now();
+    $request->merge(['waktu_selesai' => $now]);
 
-        // Jika binoculer_pd kosong, isi dengan "Tidak Ada"
-        if (!$request->filled('binoculer_pd')) {
-            $request->merge(['binoculer_pd' => 'Tidak Ada']);
-        }
+    // ✅ VALIDASI (opsional, kalau mau dipakai silakan aktifkan)
+    // $request->validate([...]);
 
-        // 🔹 Waktu selesai otomatis diisi dengan waktu saat data disimpan
-        $now = now(); // waktu saat ini
-        $request->merge(['waktu_selesai' => $now->format('Y-m-d\TH:i')]);
+    // ✅ Ambil anamnesa terakhir berdasarkan pasien
+    $anamnesa = Anamnesa::where('id_pasien', $request->id_pasien)->latest()->first();
 
-        // Validasi gabungan
-        $request->validate([
-            // Validasi Anamnesa
-            'id_pasien' => 'required|exists:pasien,id',
-            'jauh' => 'required|string|max:100',
-            'dekat' => 'required|string|max:100',
-            'gen' => 'required|string|max:100',
-            'ada_riwayat' => 'required|in:ya,tidak',
-            'riwayat' => 'required|string|max:255',
-            'lainnya' => 'nullable|string',
-
-            // Validasi Pemeriksaan
-            'od_sph' => 'nullable|string|max:10',
-            'od_cyl' => 'nullable|string|max:10',
-            'od_axis' => 'nullable|integer|between:0,180',
-            'od_add' => 'nullable|string|max:10',
-            'od_prisma' => 'nullable|string|max:10',
-            'od_base' => 'nullable|string|max:10',
-            'os_sph' => 'nullable|string|max:10',
-            'os_cyl' => 'nullable|string|max:10',
-            'os_axis' => 'nullable|integer|between:0,180',
-            'os_add' => 'nullable|string|max:10',
-            'os_prisma' => 'nullable|string|max:10',
-            'os_base' => 'nullable|string|max:10',
-            'binoculer_pd' => 'nullable|string|max:255',
-            'status_kacamata_lama' => 'required|string|max:100',
-            'keterangan_kacamata_lama' => 'nullable|string|max:255',
-            'waktu_mulai'   => 'required|date_format:Y-m-d\TH:i',
-            // 'waktu_selesai' => 'required|date_format:Y-m-d\TH:i|after_or_equal:waktu_mulai',
-        ]);
-
-        // Simpan jika nilai tidak ada di tabel
-        Jauh::firstOrCreate(['nama' => $request->jauh]);
-        Dekat::firstOrCreate(['nama' => $request->dekat]);
-        Genetik::firstOrCreate(['nama' => $request->gen]);
-        StatusKacamataLama::firstOrCreate(['nama' => $request->status_kacamata_lama]);
-
-        // Simpan data Anamnesa
-        $anamnesa = Anamnesa::create([
-            'id_pasien' => $request->id_pasien,
-            'jauh' => $request->jauh,
-            'dekat' => $request->dekat,
-            'gen' => $request->gen,
-            'riwayat' => $request->riwayat,
-            'lainnya' => $request->lainnya,
-        ]);
-
-        // Simpan data Pemeriksaan
-        Pemeriksaan::create([
-            'id_anamnesa' => $anamnesa->id,
-            'id_user' => Auth::user()->id,
-            'od_sph' => $request->od_sph,
-            'od_cyl' => $request->od_cyl,
-            'od_axis' => $request->od_axis,
-            'od_add' => $request->od_add,
-            'od_prisma' => $request->od_prisma,
-            'od_base' => $request->od_base,
-            'os_sph' => $request->os_sph,
-            'os_cyl' => $request->os_cyl,
-            'os_axis' => $request->os_axis,
-            'os_add' => $request->os_add,
-            'os_prisma' => $request->os_prisma,
-            'os_base' => $request->os_base,
-            'binoculer_pd' => $request->binoculer_pd,
-            'status_kacamata_lama' => $request->status_kacamata_lama,
-            'keterangan_kacamata_lama' => $request->keterangan_kacamata_lama,
-            'waktu_mulai' => $request->waktu_mulai,
-            'waktu_selesai' => $now,
-        ]);
-
-        return redirect()->route('pemeriksaan.index')->with('success', 'Data pemeriksaan berhasil ditambahkan.');
+    if (!$anamnesa) {
+        return back()->with('error', 'Pasien ini belum memiliki data anamnesa.');
     }
+
+    // ✅ Simpan Pemeriksaan ALAT + PETUGAS
+    Pemeriksaan::create([
+        'id_anamnesa' => $anamnesa->id,
+        // 'id_pasien'   => $request->id_pasien,
+        'id_user'     => Auth::id(),
+
+        // === pemeriksaan alat (lama) ===
+        'od_sph'    => $request->od_sph,
+        'od_cyl'    => $request->od_cyl,
+        'od_axis'   => $request->od_axis,
+        'od_add'    => $request->od_add,
+        'od_prisma' => $request->od_prisma,
+        'od_base'   => $request->od_base,
+
+        'os_sph'    => $request->os_sph,
+        'os_cyl'    => $request->os_cyl,
+        'os_axis'   => $request->os_axis,
+        'os_add'    => $request->os_add,
+        'os_prisma' => $request->os_prisma,
+        'os_base'   => $request->os_base,
+
+        // === ✅ pemeriksaan PETUGAS (baru) ===
+        'pt_od_sph'    => $request->pt_od_sph,
+        'pt_od_cyl'    => $request->pt_od_cyl,
+        'pt_od_axis'   => $request->pt_od_axis,
+        'pt_od_add'    => $request->pt_od_add,
+        'pt_od_prisma' => $request->pt_od_prisma,
+        'pt_od_base'   => $request->pt_od_base,
+
+        'pt_os_sph'    => $request->pt_os_sph,
+        'pt_os_cyl'    => $request->pt_os_cyl,
+        'pt_os_axis'   => $request->pt_os_axis,
+        'pt_os_add'    => $request->pt_os_add,
+        'pt_os_prisma' => $request->pt_os_prisma,
+        'pt_os_base'   => $request->pt_os_base,
+
+        // Lainnya
+        'binoculer_pd'            => $request->binoculer_pd ?: "Tidak Ada",
+        'status_kacamata_lama'    => $request->status_kacamata_lama,
+        'keterangan_kacamata_lama'=> $request->keterangan_kacamata_lama,
+        'waktu_mulai'             => $request->waktu_mulai,
+        'waktu_selesai'           => $now,
+    ]);
+
+    return redirect()->route('pemeriksaan.index')
+        ->with('success', 'Data pemeriksaan berhasil ditambahkan.');
+}
+
 
     public function edit(Pemeriksaan $pemeriksaan)
     {
@@ -192,92 +168,64 @@ class PemeriksaanController extends Controller
     }
 
     public function update(Request $request, Pemeriksaan $pemeriksaan)
-    {
-        // Jika tidak ada riwayat, isi dengan 'Tidak'
-        if ($request->input('ada_riwayat') === 'tidak') {
-            $request->merge(['riwayat' => 'Tidak']);
-        }
-
-        // Jika binoculer_pd kosong, isi dengan default
-        if (!$request->filled('binoculer_pd')) {
-            $request->merge(['binoculer_pd' => 'Tidak Ada']);
-        }
-
-        // 🔹 Isi otomatis waktu_selesai dengan waktu saat update disimpan
-        $now = now();
-        $request->merge(['waktu_selesai' => $now->format('Y-m-d\TH:i')]);
-
-        $request->validate([
-            // Validasi Anamnesa
-            'id_pasien' => 'required|exists:pasien,id',
-            'jauh' => 'required|string|max:100',
-            'dekat' => 'required|string|max:100',
-            'gen' => 'required|string|max:100',
-            'ada_riwayat' => 'required|in:ya,tidak',
-            'riwayat' => 'required|string|max:255',
-            'lainnya' => 'nullable|string',
-
-            // Validasi Pemeriksaan
-            'od_sph' => 'nullable|string|max:10',
-            'od_cyl' => 'nullable|string|max:10',
-            'od_axis' => 'nullable|integer|between:0,180',
-            'od_add' => 'nullable|string|max:10',
-            'od_prisma' => 'nullable|string|max:10',
-            'od_base' => 'nullable|string|max:10',
-            'os_sph' => 'nullable|string|max:10',
-            'os_cyl' => 'nullable|string|max:10',
-            'os_axis' => 'nullable|integer|between:0,180',
-            'os_add' => 'nullable|string|max:10',
-            'os_prisma' => 'nullable|string|max:10',
-            'os_base' => 'nullable|string|max:10',
-            'binoculer_pd' => 'nullable|string|max:255',
-            'status_kacamata_lama' => 'required|string|max:100',
-            'keterangan_kacamata_lama' => 'nullable|string|max:255',
-            'waktu_mulai'   => 'required|date_format:Y-m-d\TH:i',
-            'waktu_selesai' => 'required|date_format:Y-m-d\TH:i|after_or_equal:waktu_mulai',
-        ]);
-
-        // Simpan data baru jika tidak ada
-        Jauh::firstOrCreate(['nama' => $request->jauh]);
-        Dekat::firstOrCreate(['nama' => $request->dekat]);
-        Genetik::firstOrCreate(['nama' => $request->gen]);
-        StatusKacamataLama::firstOrCreate(['nama' => $request->status_kacamata_lama]);
-
-        // Update data Anamnesa
-        $anamnesa = $pemeriksaan->anamnesa;
-        $anamnesa->update([
-            'id_pasien' => $request->id_pasien,
-            'jauh' => $request->jauh,
-            'dekat' => $request->dekat,
-            'gen' => $request->gen,
-            'riwayat' => $request->riwayat,
-            'lainnya' => $request->lainnya,
-        ]);
-
-        // Update data Pemeriksaan
-        $pemeriksaan->update([
-            'id_user' => Auth::user()->id,
-            'od_sph' => $request->od_sph,
-            'od_cyl' => $request->od_cyl,
-            'od_axis' => $request->od_axis,
-            'od_add' => $request->od_add,
-            'od_prisma' => $request->od_prisma,
-            'od_base' => $request->od_base,
-            'os_sph' => $request->os_sph,
-            'os_cyl' => $request->os_cyl,
-            'os_axis' => $request->os_axis,
-            'os_add' => $request->os_add,
-            'os_prisma' => $request->os_prisma,
-            'os_base' => $request->os_base,
-            'binoculer_pd' => $request->binoculer_pd,
-            'status_kacamata_lama' => $request->status_kacamata_lama,
-            'keterangan_kacamata_lama' => $request->keterangan_kacamata_lama,
-            'waktu_mulai' => $request->waktu_mulai,
-            'waktu_selesai' => $now,
-        ]);
-
-        return redirect()->route('pemeriksaan.index')->with('success', 'Data pemeriksaan berhasil diperbarui.');
+{
+    // Jika binoculer_pd kosong, isi dengan default
+    if (!$request->filled('binoculer_pd')) {
+        $request->merge(['binoculer_pd' => 'Tidak Ada']);
     }
+
+    // 🔹 Isi otomatis waktu_selesai dengan waktu saat update disimpan
+    // $now = now();
+    // $request->merge(['waktu_selesai' => $now]);
+
+    // ✅ Update data Pemeriksaan (alat + petugas)
+    $pemeriksaan->update([
+        'id_user' => Auth::id(),
+
+        // === Pemeriksaan alat (lama) ===
+        'od_sph'    => $request->od_sph,
+        'od_cyl'    => $request->od_cyl,
+        'od_axis'   => $request->od_axis,
+        'od_add'    => $request->od_add,
+        'od_prisma' => $request->od_prisma,
+        'od_base'   => $request->od_base,
+
+        'os_sph'    => $request->os_sph,
+        'os_cyl'    => $request->os_cyl,
+        'os_axis'   => $request->os_axis,
+        'os_add'    => $request->os_add,
+        'os_prisma' => $request->os_prisma,
+        'os_base'   => $request->os_base,
+
+
+        // === ✅ Pemeriksaan Petugas (barunya) ===
+        'pt_od_sph'    => $request->pt_od_sph,
+        'pt_od_cyl'    => $request->pt_od_cyl,
+        'pt_od_axis'   => $request->pt_od_axis,
+        'pt_od_add'    => $request->pt_od_add,
+        'pt_od_prisma' => $request->pt_od_prisma,
+        'pt_od_base'   => $request->pt_od_base,
+
+        'pt_os_sph'    => $request->pt_os_sph,
+        'pt_os_cyl'    => $request->pt_os_cyl,
+        'pt_os_axis'   => $request->pt_os_axis,
+        'pt_os_add'    => $request->pt_os_add,
+        'pt_os_prisma' => $request->pt_os_prisma,
+        'pt_os_base'   => $request->pt_os_base,
+
+
+        // === Lainnya ===
+        'binoculer_pd'            => $request->binoculer_pd,
+        'status_kacamata_lama'    => $request->status_kacamata_lama,
+        'keterangan_kacamata_lama'=> $request->keterangan_kacamata_lama,
+        // 'waktu_mulai'             => $request->waktu_mulai,
+        // 'waktu_selesai'           => $now,
+    ]);
+
+    return redirect()->route('pemeriksaan.index')
+        ->with('success', 'Data pemeriksaan berhasil diperbarui.');
+}
+
 
     public function destroy(Pemeriksaan $pemeriksaan)
     {
@@ -351,4 +299,25 @@ class PemeriksaanController extends Controller
 
         return view('pemeriksaan.print', compact('pemeriksaan', 'previous'));
     }
+
+    public function getAnamnesaPasien($id_pasien)
+    {
+        $anamnesa = Anamnesa::where('id_pasien', $id_pasien)
+            ->latest()
+            ->first();
+
+        return response()->json([
+            'id_anamnesa' => $anamnesa->id ?? null,  // ✅ tambahkan id anamnesa
+
+            'jauh'    => $anamnesa->jauh ?? '-',
+            'dekat'   => $anamnesa->dekat ?? '-',
+            'gen'     => $anamnesa->gen ?? '-',
+            'riwayat' => $anamnesa->riwayat ?? '-',
+            'lainnya' => $anamnesa->lainnya ?? '-',
+
+            'exists'  => $anamnesa ? true : false
+        ]);
+    }
+
+
 }

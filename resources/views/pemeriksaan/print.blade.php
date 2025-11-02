@@ -277,11 +277,14 @@
                 </table>
 
                 <div style="margin-top: 40px; text-align: center;">
-                    <div style="border-top: 1px solid #000; margin-bottom: 10px;"></div>
+                    <div style="border-top: 1px solid #000; margin-bottom: 2px;"></div>
                     <p style="margin: 0;">BANDAR JAYA, {{ now()->translatedFormat('d F Y') }}</p>
+                <img src="/qr.jpg" width="150px" />
+
                 </div>
 
-                <div style="margin-top: 80px; text-align: center;">
+
+                <div style="margin-top: 5px; text-align: center;">
                     <p style="margin: 0;">Tanda Tangan RO</p>
                 </div>
             </div>
@@ -289,7 +292,7 @@
 
         <!-- Tambahan Footer Nama Petugas di pojok kiri bawah -->
         <div class="footer-left">
-            <p style="margin: 0;">Nama Petugas</p>
+            <p style="margin: 0;"></p>
             <p style="margin: 0;">{{ $pemeriksaan->petugas->kode_user ?? '-' }}</p>
         </div>
     </div>

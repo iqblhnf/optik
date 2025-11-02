@@ -21,16 +21,23 @@ class BarangKeluarController extends Controller
             'barang_id' => 'required',
             'jumlah' => 'required|integer|min:1',
             'tanggal_keluar' => 'required|date',
+            'gambar' => 'nullable|image|mimes:jpg,png,jpeg|max:2048'
         ]);
 
         $barang = Barang::find($request->barang_id);
-
         if ($barang->stok < $request->jumlah) {
             return back()->with('error', 'Stok tidak mencukupi!');
         }
 
+        $namaFile = null;
+        if ($request->hasFile('gambar')) {
+            $namaFile = time() . '_' . $request->gambar->getClientOriginalName();
+            $request->gambar->storeAs('barang_keluar', $namaFile, 'public');
+        }
+
         BarangKeluar::create([
             ...$request->all(),
+            'gambar' => $namaFile,
             'user_id' => auth()->id()
         ]);
 

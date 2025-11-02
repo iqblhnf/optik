@@ -237,6 +237,13 @@
                                     </a>
                                 </li>
                             </ul>
+
+                            <li class="nav-item">
+                                <a href="{{ route('setting.index') }}" class="nav-link {{ request()->routeIs('setting.*') ? 'active' : '' }}">
+                                    <i class="nav-icon bi bi-gear"></i>
+                                    <p>Setting</p>
+                                </a>
+                            </li>
                         </li>
                         @endif
 

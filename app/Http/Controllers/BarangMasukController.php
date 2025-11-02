@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\BarangMasuk;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class BarangMasukController extends Controller
 {
@@ -21,26 +23,35 @@ class BarangMasukController extends Controller
             'barang_id' => 'required',
             'jumlah' => 'required|integer|min:1',
             'tanggal_masuk' => 'required|date',
+            'gambar' => 'nullable|image|max:2048'
         ]);
+
+        $path = null;
+        if ($request->hasFile('gambar')) {
+            $path = $request->file('gambar')->store('barang-masuk', 'public');
+        }
 
         $masuk = BarangMasuk::create([
             ...$request->all(),
+            'gambar' => $path,
             'user_id' => auth()->id()
         ]);
 
-        // Update stok
-        $barang = Barang::find($request->barang_id);
-        $barang->increment('stok', $request->jumlah);
+        Barang::find($request->barang_id)->increment('stok', $request->jumlah);
 
         return back()->with('success', 'Barang masuk berhasil dicatat.');
     }
 
     public function destroy(BarangMasuk $barangMasuk)
     {
-        // rollback stok
+        if ($barangMasuk->gambar) {
+            Storage::disk('public')->delete($barangMasuk->gambar);
+        }
+
         $barangMasuk->barang->decrement('stok', $barangMasuk->jumlah);
         $barangMasuk->delete();
 
         return back()->with('success', 'Data barang masuk dihapus.');
     }
+
 }

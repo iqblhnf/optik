@@ -13,6 +13,8 @@ use App\Http\Controllers\BarangKeluarController;
 use App\Http\Controllers\StokController;
 use App\Http\Controllers\TransaksiPenjualanController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\SettingController;
+
 
 
 
@@ -21,6 +23,7 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'formLogin'])->name('login');
     Route::post('/', [AuthController::class, 'prosesLogin'])->name('login.proses');
 });
+
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -44,6 +47,10 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('laporan/penjualan', [LaporanController::class, 'penjualan'])->name('laporan.penjualan');
         Route::get('laporan/penjualan/cetak', [LaporanController::class, 'cetakPenjualan'])->name('laporan.penjualan.cetak');
+
+        Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
+        Route::post('/setting', [SettingController::class, 'update'])->name('setting.update');
+
     });
 
     Route::middleware(['role:pemeriksaan'])->group(function () {
@@ -57,3 +64,6 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('transaksi-penjualan', TransaksiPenjualanController::class);
     });
 });
+
+Route::get('/api/anamnesa/{id_pasien}', [PemeriksaanController::class, 'getAnamnesaPasien']);
+

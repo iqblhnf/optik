@@ -10,54 +10,112 @@
         </div>
 
         <form action="{{ route('pasien.update', $pasien->id) }}" method="POST">
-            @csrf
-            @method('PUT')
+            @csrf @method('PUT')
 
             <div class="card-body">
+                {{-- DATA PASIEN --}}
                 <div class="mb-3">
-                    <label for="nama" class="form-label">Nama Lengkap</label>
-                    <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
+                    <label class="form-label">Nama Lengkap</label>
+                    <input type="text" name="nama" class="form-control"
                         value="{{ old('nama', $pasien->nama) }}">
-                    @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="usia" class="form-label">Usia</label>
-                    <input type="text" name="usia" class="form-control @error('usia') is-invalid @enderror"
+                    <label class="form-label">Usia</label>
+                    <input type="text" name="usia" class="form-control"
                         value="{{ old('usia', $pasien->usia) }}">
-                    @error('usia') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="jenis_kelamin" class="form-label">Jenis Kelamin</label>
-                    <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror">
+                    <label class="form-label">Jenis Kelamin</label>
+                    <select name="jenis_kelamin" class="form-select">
                         <option value="">-- Pilih --</option>
-                        <option value="Laki-laki" {{ old('jenis_kelamin', $pasien->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-                        <option value="Perempuan" {{ old('jenis_kelamin', $pasien->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                        <option value="Laki-laki" {{ $pasien->jenis_kelamin == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ $pasien->jenis_kelamin == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
                     </select>
-                    @error('jenis_kelamin') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="pekerjaan" class="form-label">Pekerjaan</label>
-                    <input type="text" name="pekerjaan" class="form-control @error('pekerjaan') is-invalid @enderror"
+                    <label class="form-label">Pekerjaan</label>
+                    <input type="text" name="pekerjaan" class="form-control"
                         value="{{ old('pekerjaan', $pasien->pekerjaan) }}">
-                    @error('pekerjaan') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="alamat" class="form-label">Alamat</label>
-                    <input type="text" name="alamat" class="form-control @error('alamat') is-invalid @enderror"
+                    <label class="form-label">Alamat</label>
+                    <input type="text" name="alamat" class="form-control"
                         value="{{ old('alamat', $pasien->alamat) }}">
-                    @error('alamat') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="no_telp" class="form-label">No. Telepon</label>
-                    <input type="text" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror"
+                    <label class="form-label">No. Telepon</label>
+                    <input type="text" name="no_telp" class="form-control"
                         value="{{ old('no_telp', $pasien->no_telp) }}">
-                    @error('no_telp') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+
+
+{{-- ================= ANAMNESA ================= --}}
+<hr class="mt-4">
+<h5 class="fw-bold">🩺 ANAMNESA</h5>
+
+<div class="card card-info card-outline mt-3">
+    <div class="card-header">
+        <h5 class="card-title fw-bold">Anamnesa Pasien</h5>
+    </div>
+
+    <div class="card-body row">
+        {{-- JAUH --}}
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Jarak Jauh</label>
+            <select name="jauh" class="form-select select2">
+                @foreach($jauhOptions as $opt)
+                    <option value="{{ $opt }}" {{ $anamnesa->jauh == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- DEKAT --}}
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Jarak Dekat</label>
+            <select name="dekat" class="form-select select2">
+                @foreach($dekatOptions as $opt)
+                    <option value="{{ $opt }}" {{ $anamnesa->dekat == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- GENETIK --}}
+        <div class="col-md-4 mb-3">
+            <label class="form-label">Genetik</label>
+            <select name="gen" class="form-select select2">
+                @foreach($genetikOptions as $opt)
+                    <option value="{{ $opt }}" {{ $anamnesa->gen == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- RIWAYAT PENYAKIT MULTI SELECT --}}
+        <div class="col-md-12 mb-3">
+            <label class="form-label">Riwayat Penyakit (bisa pilih lebih dari satu)</label>
+            <select name="riwayat[]" multiple class="form-select select2" data-placeholder="-- pilih riwayat --">
+                @foreach($penyakitOptions as $p)
+                    <option value="{{ $p }}"
+                        @if(in_array($p, $selectedRiwayat)) selected @endif>
+                        {{ $p }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- LAINNYA --}}
+        <div class="col-md-12 mb-3">
+            <label class="form-label">Keterangan Tambahan</label>
+            <textarea name="lainnya" class="form-control">{{ $anamnesa->lainnya ?? '' }}</textarea>
+        </div>
+
+    </div>
+</div>
+
             </div>
 
             <div class="card-footer">
@@ -67,4 +125,15 @@
         </form>
     </div>
 </div>
+
+{{-- Select2 --}}
+<script>
+$(document).ready(function() {
+    $('.select2').select2({
+        tags: true,
+        width: '100%'
+    });
+});
+</script>
+
 @endsection

@@ -11,27 +11,29 @@ class Pemeriksaan extends Model
 
     protected $table = 'pemeriksaan';
 
-    protected $fillable = [
-        'id_anamnesa',
-        'id_user',
-        'od_sph',
-        'od_cyl',
-        'od_axis',
-        'od_add',
-        'od_prisma',
-        'od_base',
-        'os_sph',
-        'os_cyl',
-        'os_axis',
-        'os_add',
-        'os_prisma',
-        'os_base',
-        'binoculer_pd',
-        'status_kacamata_lama',
-        'keterangan_kacamata_lama',
-        'waktu_mulai',
-        'waktu_selesai'
-    ];
+    // protected $fillable = [
+    //     'id_anamnesa',
+    //     'id_user',
+    //     'od_sph',
+    //     'od_cyl',
+    //     'od_axis',
+    //     'od_add',
+    //     'od_prisma',
+    //     'od_base',
+    //     'os_sph',
+    //     'os_cyl',
+    //     'os_axis',
+    //     'os_add',
+    //     'os_prisma',
+    //     'os_base',
+    //     'binoculer_pd',
+    //     'status_kacamata_lama',
+    //     'keterangan_kacamata_lama',
+    //     'waktu_mulai',
+    //     'waktu_selesai'
+    // ];
+
+    protected $guarded =[];
 
     protected $casts = [
         'waktu_mulai' => 'datetime',

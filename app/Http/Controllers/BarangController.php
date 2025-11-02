@@ -9,9 +9,25 @@ class BarangController extends Controller
 {
     public function index()
     {
-        $barangs = Barang::latest()->paginate(10);
-        return view('barang.index', compact('barangs'));
+        $barangs = Barang::latest()->get();
+
+        $kategoriList = Barang::select('kategori')
+                            ->distinct()
+                            ->orderBy('kategori')
+                            ->pluck('kategori')
+                            ->filter()
+                            ->toArray();
+
+        $satuanList = Barang::select('satuan')
+                            ->distinct()
+                            ->orderBy('satuan')
+                            ->pluck('satuan')
+                            ->filter()
+                            ->toArray();
+
+        return view('barang.index', compact('barangs','kategoriList','satuanList'));
     }
+
 
     public function store(Request $request)
     {

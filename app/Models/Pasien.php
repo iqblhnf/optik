@@ -20,10 +20,16 @@ class Pasien extends Model
         'no_telp'
     ];
 
-    public function anamnesas()
+    // public function anamnesas()
+    // {
+    //     return $this->hasMany(Anamnesa::class, 'id_pasien');
+    // }
+
+    public function anamnesa()
     {
-        return $this->hasMany(Anamnesa::class, 'id_pasien');
+        return $this->hasOne(Anamnesa::class, 'id_pasien');  // (foreign key, local key)
     }
+
 
     public function pemeriksaans()
     {
