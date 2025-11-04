@@ -60,6 +60,44 @@
                         value="{{ old('no_telp', $pasien->no_telp) }}">
                 </div>
 
+                <div class="mb-4">
+    <hr>
+    <h5 class="fw-bold">👁️ Pemeriksaan Mata</h5>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th> </th>
+                    <th>SPH</th>
+                    <th>CYL</th>
+                    <th>AXIS</th>
+                    <th>PRISMA</th>
+                    <th>BASE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>OD (Kanan)</th>
+                    <td><input type="text" name="od_sph" class="form-control" value="{{ old('od_sph', $pasien->od_sph) }}"></td>
+                    <td><input type="text" name="od_cyl" class="form-control" value="{{ old('od_cyl', $pasien->od_cyl) }}"></td>
+                    <td><input type="text" name="od_axis" class="form-control" value="{{ old('od_axis', $pasien->od_axis) }}"></td>
+                    <td><input type="text" name="od_prisma" class="form-control" value="{{ old('od_prisma', $pasien->od_prisma) }}"></td>
+                    <td><input type="text" name="od_base" class="form-control" value="{{ old('od_base', $pasien->od_base) }}"></td>
+                </tr>
+                <tr>
+                    <th>OS (Kiri)</th>
+                    <td><input type="text" name="os_sph" class="form-control" value="{{ old('os_sph', $pasien->os_sph) }}"></td>
+                    <td><input type="text" name="os_cyl" class="form-control" value="{{ old('os_cyl', $pasien->os_cyl) }}"></td>
+                    <td><input type="text" name="os_axis" class="form-control" value="{{ old('os_axis', $pasien->os_axis) }}"></td>
+                    <td><input type="text" name="os_prisma" class="form-control" value="{{ old('os_prisma', $pasien->os_prisma) }}"></td>
+                    <td><input type="text" name="os_base" class="form-control" value="{{ old('os_base', $pasien->os_base) }}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
 
 {{-- ================= ANAMNESA ================= --}}
 <hr class="mt-4">
@@ -74,9 +112,12 @@
         {{-- JAUH --}}
         <div class="col-md-4 mb-3">
             <label class="form-label">Jarak Jauh</label>
-            <select name="jauh" class="form-select select2">
+            <select name="jauh[]" multiple class="form-select select2">
                 @foreach($jauhOptions as $opt)
-                    <option value="{{ $opt }}" {{ $anamnesa->jauh == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                    <option value="{{ $opt }}" 
+                        @if(in_array($opt, $selectedJauh)) selected @endif>
+                        {{ $opt }}
+                    </option>
                 @endforeach
             </select>
         </div>
@@ -84,9 +125,12 @@
         {{-- DEKAT --}}
         <div class="col-md-4 mb-3">
             <label class="form-label">Jarak Dekat</label>
-            <select name="dekat" class="form-select select2">
+            <select name="dekat[]" multiple class="form-select select2">
                 @foreach($dekatOptions as $opt)
-                    <option value="{{ $opt }}" {{ $anamnesa->dekat == $opt ? 'selected' : '' }}>{{ $opt }}</option>
+                    <option value="{{ $opt }}" 
+                        @if(in_array($opt, $selectedDekat)) selected @endif>
+                        {{ $opt }}
+                    </option>
                 @endforeach
             </select>
         </div>

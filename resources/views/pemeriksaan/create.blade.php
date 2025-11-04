@@ -273,35 +273,61 @@ document.addEventListener("DOMContentLoaded", function () {
         fetch("{{ url('/api/anamnesa') }}/" + id)
             .then(res => res.json())
             .then(data => {
+                // 🔹 Parsing fungsi bantu
+                const parseToText = (input) => {
+                    if (!input) return '-';
+                    if (typeof input === "string" && input.startsWith("[")) {
+                        try {
+                            const arr = JSON.parse(input);
+                            return Array.isArray(arr) ? arr.join(", ") : input;
+                        } catch {
+                            return input;
+                        }
+                    }
+                    if (Array.isArray(input)) {
+                        return input.join(", ");
+                    }
+                    return input;
+                };
 
-                let riwayatFormatted = data.riwayat;
+                // 🔹 Format tiap bagian
+                let jauhFormatted = parseToText(data.jauh);
+                let dekatFormatted = parseToText(data.dekat);
+                let riwayatFormatted = parseToText(data.riwayat);
 
-                if (typeof data.riwayat === "string" && data.riwayat.startsWith("[")) {
-                    try {
-                        const arr = JSON.parse(data.riwayat);
-                        riwayatFormatted = arr.join(", ");
-                    } catch {}
-                }
-
-                if (Array.isArray(data.riwayat)) {
-                    riwayatFormatted = data.riwayat.join(", ");
-                }
-
+                // 🔹 Tampilkan di tabel
                 viewDiv.innerHTML = `
                     <table class="table table-bordered">
-                        <tr><th>Jarak Jauh</th><td>${data.jauh}</td></tr>
-                        <tr><th>Jarak Dekat</th><td>${data.dekat}</td></tr>
+                        <tr><th>Jarak Jauh</th><td>${jauhFormatted}</td></tr>
+                        <tr><th>Jarak Dekat</th><td>${dekatFormatted}</td></tr>
                         <tr><th>Genetik</th><td>${data.gen}</td></tr>
                         <tr><th>Riwayat Penyakit</th><td>${riwayatFormatted}</td></tr>
-                        <tr><th>Keterangan Tambahan</th><td>${data.lainnya}</td></tr>
+                        <tr><th>Keterangan Tambahan</th><td>${data.lainnya ?? '-'}</td></tr>
                     </table>
                 `;
 
-                document.querySelector("input[name='jauh']").value = data.jauh ?? '';
-                document.querySelector("input[name='dekat']").value = data.dekat ?? '';
+                // 🔹 Isi kembali input (jika ada form edit)
                 document.querySelector("input[name='gen']").value = data.gen ?? '';
-                document.querySelector("input[name='riwayat']").value = data.riwayat ?? '';
-                document.querySelector("input[name='lainnya']").value = data.lainnya ?? '';
+                document.querySelector("textarea[name='lainnya']").value = data.lainnya ?? '';
+
+                // Jika pakai select2 multi
+                if ($('.select2').length) {
+                    const setSelectValues = (name, val) => {
+                        let parsed = [];
+                        if (typeof val === "string" && val.startsWith("[")) {
+                            try { parsed = JSON.parse(val); } catch {}
+                        } else if (Array.isArray(val)) {
+                            parsed = val;
+                        } else if (val) {
+                            parsed = [val];
+                        }
+                        $(`select[name='${name}[]']`).val(parsed).trigger('change');
+                    };
+
+                    setSelectValues('jauh', data.jauh);
+                    setSelectValues('dekat', data.dekat);
+                    setSelectValues('riwayat', data.riwayat);
+                }
             })
             .catch(err => console.error(err));
         });

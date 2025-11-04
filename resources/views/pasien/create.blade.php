@@ -58,6 +58,46 @@
                     <input type="number" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror" value="{{ old('no_telp') }}" required>
                     @error('no_telp') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+
+                <div class="mb-4">
+    <hr>
+    <h5 class="fw-bold">👁️ Pemeriksaan Kaca Mata Lama</h5>
+    <small><i>(Kosongkan jika tidak memiliki kaca mata lama)</i></small><br><small>
+
+    <div class="table-responsive mt-3">
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-light">
+                <tr>
+                    <th> </th>
+                    <th>SPH</th>
+                    <th>CYL</th>
+                    <th>AXIS</th>
+                    <th>PRISMA</th>
+                    <th>BASE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>OD (Kanan)</th>
+                    <td><input type="text" name="od_sph" class="form-control" value="{{ old('od_sph') }}"></td>
+                    <td><input type="text" name="od_cyl" class="form-control" value="{{ old('od_cyl') }}"></td>
+                    <td><input type="text" name="od_axis" class="form-control" value="{{ old('od_axis') }}"></td>
+                    <td><input type="text" name="od_prisma" class="form-control" value="{{ old('od_prisma') }}"></td>
+                    <td><input type="text" name="od_base" class="form-control" value="{{ old('od_base') }}"></td>
+                </tr>
+                <tr>
+                    <th>OS (Kiri)</th>
+                    <td><input type="text" name="os_sph" class="form-control" value="{{ old('os_sph') }}"></td>
+                    <td><input type="text" name="os_cyl" class="form-control" value="{{ old('os_cyl') }}"></td>
+                    <td><input type="text" name="os_axis" class="form-control" value="{{ old('os_axis') }}"></td>
+                    <td><input type="text" name="os_prisma" class="form-control" value="{{ old('os_prisma') }}"></td>
+                    <td><input type="text" name="os_base" class="form-control" value="{{ old('os_base') }}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
             {{-- ✅ ANAMNESA --}}
     <hr class="mt-4">
     <h5 class="fw-bold">🩺 ANAMNESA</h5>
@@ -73,27 +113,22 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <label class="form-label">Jarak Jauh (👁️ Jauh)</label>
-                <select name="jauh" class="form-select select2 @error('jauh') is-invalid @enderror"
-                        data-placeholder="Pilih item" required>
-                    <option value=""></option>
+                <select name="jauh[]" class="form-select select2" multiple required>
                     @foreach($jauhOptions as $opt)
                         <option value="{{ $opt }}">{{ $opt }}</option>
                     @endforeach
                 </select>
-                @error('jauh') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
 
             <div class="col-md-4 mb-3">
                 <label class="form-label">Jarak Dekat (👁️ Dekat)</label>
-                <select name="dekat" class="form-select select2 @error('dekat') is-invalid @enderror"
-                        data-placeholder="Pilih item" required>
-                    <option value=""></option>
+                <select name="dekat[]" class="form-select select2" multiple required>
                     @foreach($dekatOptions as $opt)
                         <option value="{{ $opt }}">{{ $opt }}</option>
                     @endforeach
                 </select>
-                @error('dekat') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
+
 
             <div class="col-md-4 mb-3">
                 <label class="form-label">Genetik (Riwayat Mata Keluarga)</label>

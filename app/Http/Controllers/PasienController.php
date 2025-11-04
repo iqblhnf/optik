@@ -71,17 +71,31 @@ class PasienController extends Controller
             'pekerjaan' => $request->pekerjaan,
             'alamat' => $request->alamat,
             'no_telp' => $request->no_telp,
+
+            // Pemeriksaan Mata
+            'od_sph' => $request->od_sph,
+            'od_cyl' => $request->od_cyl,
+            'od_axis' => $request->od_axis,
+            'od_prisma' => $request->od_prisma,
+            'od_base' => $request->od_base,
+            'os_sph' => $request->os_sph,
+            'os_cyl' => $request->os_cyl,
+            'os_axis' => $request->os_axis,
+            'os_prisma' => $request->os_prisma,
+            'os_base' => $request->os_base,
         ]);
+
 
         // 🔹 Simpan anamnesa
         Anamnesa::create([
             'id_pasien' => $pasien->id,
-            'jauh'      => $request->jauh,
-            'dekat'     => $request->dekat,
+            'jauh'      => json_encode($request->jauh),
+            'dekat'     => json_encode($request->dekat),
             'gen'       => $request->gen,
             'riwayat'   => json_encode($request->riwayat),
             'lainnya'   => $request->lainnya,
         ]);
+
 
         return redirect()->route('pasien.index')->with('success', "Data pasien + anamnesa berhasil ditambahkan (No.RM: {$no_rm})");
     }
@@ -107,8 +121,12 @@ class PasienController extends Controller
 
         // supaya tidak error kalau null
         $selectedRiwayat = [];
+        $selectedJauh = [];
+        $selectedDekat = [];
 
         if ($anamnesa) {
+            $selectedJauh  = json_decode($anamnesa->jauh, true) ?? [];
+            $selectedDekat = json_decode($anamnesa->dekat, true) ?? [];
             if (is_array($anamnesa->riwayat)) {
                 $selectedRiwayat = $anamnesa->riwayat;
             } elseif (!empty($anamnesa->riwayat)) {
@@ -116,7 +134,7 @@ class PasienController extends Controller
             }
         }
 
-        return view('pasien.edit', compact('pasien', 'anamnesa', 'selectedRiwayat') + $data);
+        return view('pasien.edit', compact('pasien', 'anamnesa', 'selectedRiwayat', 'selectedJauh', 'selectedDekat') + $data);
     }
 
 
@@ -133,30 +151,32 @@ class PasienController extends Controller
             'pekerjaan' => 'required|string|max:100',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|max:15',
-            'jauh' => 'required|string',
-            'dekat' => 'required|string',
+            'jauh' => 'nullable|array',
+            'dekat' => 'nullable|array',
             'gen' => 'required|string',
-            'riwayat' => 'nullable|array',
-            'riwayat.*' => 'string|max:255',
+            'riwayat' => 'nullable|array'
         ]);
 
 
         $pasien->update($request->only([
-            'no_rm', 'nama', 'usia', 'jenis_kelamin', 'pekerjaan', 'alamat', 'no_telp'
+            'no_rm', 'nama', 'usia', 'jenis_kelamin', 'pekerjaan', 'alamat', 'no_telp',
+            'od_sph', 'od_cyl', 'od_axis', 'od_prisma', 'od_base',
+            'os_sph', 'os_cyl', 'os_axis', 'os_prisma', 'os_base',
         ]));
 
 
         // update anamnesa, jika tidak ada → create
-        \App\Models\Anamnesa::updateOrCreate(
+        Anamnesa::updateOrCreate(
             ['id_pasien' => $pasien->id],
             [
-                'jauh'    => $request->jauh,
-                'dekat'   => $request->dekat,
+                'jauh'    => json_encode($request->jauh),
+                'dekat'   => json_encode($request->dekat),
                 'gen'     => $request->gen,
                 'riwayat' => json_encode($request->riwayat),
                 'lainnya' => $request->lainnya,
             ]
         );
+
 
         return redirect()->route('pasien.index')->with('success', 'Data pasien berhasil diperbarui.');
     }

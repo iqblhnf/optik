@@ -102,17 +102,25 @@
             </div>
 
             <div class="right">
-                <table>
+                <table class="table">
                     <tr>
                         <td colspan="2"><strong>ANAMNESA</strong></td>
                     </tr>
                     <tr>
                         <td>Jauh</td>
-                        <td>: {{ $pemeriksaan->anamnesa->jauh }}</td>
+                        <td>:
+                            {{ is_array(json_decode($pemeriksaan->anamnesa->jauh, true))
+                                ? implode(', ', json_decode($pemeriksaan->anamnesa->jauh, true))
+                                : $pemeriksaan->anamnesa->jauh }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Dekat</td>
-                        <td>: {{ $pemeriksaan->anamnesa->dekat }}</td>
+                        <td>:
+                            {{ is_array(json_decode($pemeriksaan->anamnesa->dekat, true))
+                                ? implode(', ', json_decode($pemeriksaan->anamnesa->dekat, true))
+                                : $pemeriksaan->anamnesa->dekat }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Gen</td>
@@ -120,13 +128,18 @@
                     </tr>
                     <tr>
                         <td>Riwayat</td>
-                        <td>: {{ $pemeriksaan->anamnesa->riwayat }}</td>
+                        <td>:
+                            {{ is_array(json_decode($pemeriksaan->anamnesa->riwayat, true))
+                                ? implode(', ', json_decode($pemeriksaan->anamnesa->riwayat, true))
+                                : $pemeriksaan->anamnesa->riwayat }}
+                        </td>
                     </tr>
                     <tr>
                         <td>Lainnya</td>
                         <td>: {{ $pemeriksaan->anamnesa->lainnya }}</td>
                     </tr>
                 </table>
+
             </div>
         </div>
 
@@ -279,6 +292,7 @@
                 <div style="margin-top: 40px; text-align: center;">
                     <div style="border-top: 1px solid #000; margin-bottom: 2px;"></div>
                     <p style="margin: 0;">BANDAR JAYA, {{ now()->translatedFormat('d F Y') }}</p>
+                    <p style="margin: 0;">Tanda Tangan RO</p>
                 <img src="/qr.jpg" width="150px" />
 
                 </div>
@@ -287,7 +301,7 @@
                 <div style="margin-top: 5px; text-align: center;">
                     <p style="margin: 0;">M FATHONI </p>
                     <p style="margin: 0;">503/0005/064/D.VI.17/VI/2022 </p>
-                    <p style="margin: 0;">Tanda Tangan RO</p>
+                    
                 </div>
             </div>
         </div>

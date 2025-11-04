@@ -289,16 +289,42 @@ class PemeriksaanController extends Controller
         // Ambil ID pasien dari relasi
         $id_pasien = $pemeriksaan->anamnesa->id_pasien ?? null;
 
-        // Pemeriksaan sebelumnya dari pasien yang sama (bukan hanya anamnesa yg sama)
+        // Pemeriksaan sebelumnya dari pasien yang sama
         $previous = Pemeriksaan::whereHas('anamnesa', function ($query) use ($id_pasien) {
-            $query->where('id_pasien', $id_pasien);
-        })
+                $query->where('id_pasien', $id_pasien);
+            })
             ->where('id', '<', $pemeriksaan->id)
             ->orderByDesc('id')
             ->first();
 
+        // 🔹 Ambil data pasien (untuk fallback)
+        $pasien = $pemeriksaan->anamnesa->pasien ?? null;
+
+        // 🔹 Kalau belum ada pemeriksaan sebelumnya, gunakan data pasien
+        if (!$previous && $pasien) {
+            $previous = (object) [
+                'od_sph' => $pasien->od_sph,
+                'od_cyl' => $pasien->od_cyl,
+                'od_axis' => $pasien->od_axis,
+                'od_prisma' => $pasien->od_prisma,
+                'od_base' => $pasien->od_base,
+                'od_add' => $pasien->od_add ?? null,
+
+                'os_sph' => $pasien->os_sph,
+                'os_cyl' => $pasien->os_cyl,
+                'os_axis' => $pasien->os_axis,
+                'os_prisma' => $pasien->os_prisma,
+                'os_base' => $pasien->os_base,
+                'os_add' => $pasien->os_add ?? null,
+
+                'status_kacamata_lama' => 'Data dari rekam pasien',
+                'keterangan_kacamata_lama' => null,
+            ];
+        }
+
         return view('pemeriksaan.print', compact('pemeriksaan', 'previous'));
     }
+
 
     public function getAnamnesaPasien($id_pasien)
     {

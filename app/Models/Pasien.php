@@ -11,15 +11,7 @@ class Pasien extends Model
 
     protected $table = 'pasien';
 
-    protected $fillable = [
-        'nama',
-        'usia',
-        'jenis_kelamin',
-        'pekerjaan',
-        'alamat',
-        'no_telp',
-        'no_rm',
-    ];
+    protected $guarded = [];
 
     // public function anamnesas()
     // {

@@ -19,7 +19,7 @@
             <a href="{{ route('pemeriksaan.create') }}" class="btn btn-sm btn-primary"><i class="bi bi-plus-circle"></i> Tambah</a>
         </div>
         <div class="card-body">
-            <div style="overflow-x: auto;">
+            <div>
                 <div class="mb-3">
                     <button id="collapseAll" class="btn btn-sm btn-secondary">Tutup Semua</button>
                 </div>
@@ -62,15 +62,15 @@
 
 <style>
     /* Membuat konten kolom tidak terpotong dan melebar sesuai isi */
-    table.dataTable td {
+    /* table.dataTable td {
         white-space: nowrap;
-    }
+    } */
 
     /* Memastikan scroll horizontal aktif */
-    div.dataTables_wrapper {
+    /* div.dataTables_wrapper {
         width: 100%;
         overflow-x: auto;
-    }
+    } */
 </style>
 
 <style>
