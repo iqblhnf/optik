@@ -52,6 +52,98 @@
             </div>
         </div>
 
+        
+        {{-- ================= PEMERIKSAAN PETUGAS ================= --}}
+        <div class="alert alert-dark fw-bold mt-4">PEMERIKSAAN PETUGAS / MANUAL</div>
+
+        <div class="row">
+
+            {{-- OD --}}
+            <div class="col-md-6">
+                <div class="card border-dark shadow-sm mb-3">
+                    <div class="card-header bg-dark">
+                        <h5 class="mb-0 text-white">OD (Mata Kanan)</h5>
+                    </div>
+
+                    <div class="card-body">
+                        {{-- DISTANCE --}}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
+
+                            <div class="row g-3">
+                                @foreach (['sph','cyl','axis','prisma','base'] as $f)
+                                <div class="col-md-4">
+                                    <label class="form-label">{{ strtoupper($f) }}</label>
+
+                                    @if ($f === 'axis')
+                                        <div class="input-group">
+                                            <input type="text" name="pt_od_{{ $f }}" class="form-control"
+                                                value="{{ old('pt_od_'.$f, $pemeriksaan->{'pt_od_'.$f}) }}">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    @else
+                                        <input type="text" name="pt_od_{{ $f }}" class="form-control"
+                                            value="{{ old('pt_od_'.$f, $pemeriksaan->{'pt_od_'.$f}) }}">
+                                    @endif
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- NEAR --}}
+                        <div class="border rounded p-3 bg-light">
+                            <h6 class="fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
+                            <input type="text" name="pt_od_add" class="form-control col-md-4"
+                                value="{{ old('pt_od_add', $pemeriksaan->pt_od_add) }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {{-- OS --}}
+            <div class="col-md-6">
+                <div class="card border-secondary shadow-sm mb-3">
+                    <div class="card-header bg-secondary">
+                        <h5 class="mb-0 text-white">OS (Mata Kiri)</h5>
+                    </div>
+
+                    <div class="card-body">
+                        {{-- DISTANCE --}}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
+
+                            <div class="row g-3">
+                                @foreach (['sph','cyl','axis','prisma','base'] as $f)
+                                <div class="col-md-4">
+                                    <label class="form-label">{{ strtoupper($f) }}</label>
+
+                                    @if ($f === 'axis')
+                                        <div class="input-group">
+                                            <input type="text" name="pt_os_{{ $f }}" class="form-control"
+                                                value="{{ old('pt_os_'.$f, $pemeriksaan->{'pt_os_'.$f}) }}">
+                                            <span class="input-group-text">°</span>
+                                        </div>
+                                    @else
+                                        <input type="text" name="pt_os_{{ $f }}" class="form-control"
+                                            value="{{ old('pt_os_'.$f, $pemeriksaan->{'pt_os_'.$f}) }}">
+                                    @endif
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- NEAR --}}
+                        <div class="border rounded p-3 bg-light">
+                            <h6 class="fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
+                            <input type="text" name="pt_os_add" class="form-control col-md-4"
+                                value="{{ old('pt_os_add', $pemeriksaan->pt_os_add) }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
 
         {{-- ================= PEMERIKSAAN ALAT ================= --}}
         <div class="alert alert-success fw-bold">PEMERIKSAAN ALAT (AUTO REFRACTOR)</div>
@@ -145,97 +237,6 @@
         </div>
 
 
-        {{-- ================= PEMERIKSAAN PETUGAS ================= --}}
-        <div class="alert alert-dark fw-bold mt-4">PEMERIKSAAN PETUGAS / MANUAL</div>
-
-        <div class="row">
-
-            {{-- OD --}}
-            <div class="col-md-6">
-                <div class="card border-dark shadow-sm mb-3">
-                    <div class="card-header bg-dark">
-                        <h5 class="mb-0 text-white">OD (Mata Kanan)</h5>
-                    </div>
-
-                    <div class="card-body">
-                        {{-- DISTANCE --}}
-                        <div class="border rounded p-3 mb-3">
-                            <h6 class="fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
-
-                            <div class="row g-3">
-                                @foreach (['sph','cyl','axis','prisma','base'] as $f)
-                                <div class="col-md-4">
-                                    <label class="form-label">{{ strtoupper($f) }}</label>
-
-                                    @if ($f === 'axis')
-                                        <div class="input-group">
-                                            <input type="text" name="pt_od_{{ $f }}" class="form-control"
-                                                value="{{ old('pt_od_'.$f, $pemeriksaan->{'pt_od_'.$f}) }}">
-                                            <span class="input-group-text">°</span>
-                                        </div>
-                                    @else
-                                        <input type="text" name="pt_od_{{ $f }}" class="form-control"
-                                            value="{{ old('pt_od_'.$f, $pemeriksaan->{'pt_od_'.$f}) }}">
-                                    @endif
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- NEAR --}}
-                        <div class="border rounded p-3 bg-light">
-                            <h6 class="fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
-                            <input type="text" name="pt_od_add" class="form-control col-md-4"
-                                value="{{ old('pt_od_add', $pemeriksaan->pt_od_add) }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            {{-- OS --}}
-            <div class="col-md-6">
-                <div class="card border-secondary shadow-sm mb-3">
-                    <div class="card-header bg-secondary">
-                        <h5 class="mb-0 text-white">OS (Mata Kiri)</h5>
-                    </div>
-
-                    <div class="card-body">
-                        {{-- DISTANCE --}}
-                        <div class="border rounded p-3 mb-3">
-                            <h6 class="fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
-
-                            <div class="row g-3">
-                                @foreach (['sph','cyl','axis','prisma','base'] as $f)
-                                <div class="col-md-4">
-                                    <label class="form-label">{{ strtoupper($f) }}</label>
-
-                                    @if ($f === 'axis')
-                                        <div class="input-group">
-                                            <input type="text" name="pt_os_{{ $f }}" class="form-control"
-                                                value="{{ old('pt_os_'.$f, $pemeriksaan->{'pt_os_'.$f}) }}">
-                                            <span class="input-group-text">°</span>
-                                        </div>
-                                    @else
-                                        <input type="text" name="pt_os_{{ $f }}" class="form-control"
-                                            value="{{ old('pt_os_'.$f, $pemeriksaan->{'pt_os_'.$f}) }}">
-                                    @endif
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- NEAR --}}
-                        <div class="border rounded p-3 bg-light">
-                            <h6 class="fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
-                            <input type="text" name="pt_os_add" class="form-control col-md-4"
-                                value="{{ old('pt_os_add', $pemeriksaan->pt_os_add) }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
 
         {{-- ================= LAINNYA ================= --}}
         <div class="card card-secondary card-outline mt-3">
@@ -256,7 +257,7 @@
                 </div>
 
                 <div class="mb-3 col-md-12">
-                    <label>Keterangan Kacamata Lama</label>
+                    <label>Keterangan</label>
                     <textarea name="keterangan_kacamata_lama" class="form-control">{{ old('keterangan_kacamata_lama', $pemeriksaan->keterangan_kacamata_lama) }}</textarea>
                 </div>
             </div>

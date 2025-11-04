@@ -17,7 +17,8 @@ class Pasien extends Model
         'jenis_kelamin',
         'pekerjaan',
         'alamat',
-        'no_telp'
+        'no_telp',
+        'no_rm',
     ];
 
     // public function anamnesas()

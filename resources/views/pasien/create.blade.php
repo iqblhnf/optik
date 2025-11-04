@@ -13,6 +13,13 @@
             @csrf
             <div class="card-body">
                 <div class="mb-3">
+                    <label for="no_rm" class="form-label">No. Rekam Medis</label>
+                    <input type="number" name="no_rm" class="form-control @error('no_rm') is-invalid @enderror"
+                        value="{{ old('no_rm') }}" >
+                    @error('no_rm') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="mb-3">
                     <label for="nama" class="form-label">Nama Lengkap</label>
                     <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}">
                     @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror

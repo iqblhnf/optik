@@ -47,26 +47,45 @@ class PasienController extends Controller
             'gen' => 'required',
             'riwayat' => 'nullable',
             'lainnya' => 'nullable',
+            'no_rm' => 'nullable|string|max:50|unique:pasien,no_rm', // validasi tambahan
         ]);
 
-        $pasien = Pasien::create($request->only(['nama','usia','jenis_kelamin','pekerjaan','alamat','no_telp']));
+        // 🔹 Generate otomatis jika no_rm kosong
+        $no_rm = $request->no_rm;
+        if (empty($no_rm)) {
+            $last = Pasien::orderByDesc('no_rm')->first();
+            if ($last && is_numeric($last->no_rm)) {
+                $next = str_pad((int)$last->no_rm + 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $next = '0001';
+            }
+            $no_rm = $next;
+        }
 
-        // jika tidak ada riwayat → set default "Tidak"
-        $riwayat = $request->ada_riwayat === "ya" ? $request->riwayat : "Tidak";
+        // 🔹 Simpan pasien
+        $pasien = Pasien::create([
+            'no_rm' => $no_rm,
+            'nama' => $request->nama,
+            'usia' => $request->usia,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'pekerjaan' => $request->pekerjaan,
+            'alamat' => $request->alamat,
+            'no_telp' => $request->no_telp,
+        ]);
 
-        // PasienController@store
-        $anamnesa = Anamnesa::create([
+        // 🔹 Simpan anamnesa
+        Anamnesa::create([
             'id_pasien' => $pasien->id,
             'jauh'      => $request->jauh,
             'dekat'     => $request->dekat,
             'gen'       => $request->gen,
-            'riwayat'   => json_encode($request->riwayat), // <-- multi select
+            'riwayat'   => json_encode($request->riwayat),
             'lainnya'   => $request->lainnya,
         ]);
 
-
-        return redirect()->route('pasien.index')->with('success', 'Data pasien + anamnesa berhasil ditambahkan');
+        return redirect()->route('pasien.index')->with('success', "Data pasien + anamnesa berhasil ditambahkan (No.RM: {$no_rm})");
     }
+
 
 
     // Tampilkan detail pasien (opsional)
@@ -77,28 +96,28 @@ class PasienController extends Controller
 
     // Form edit pasien
     public function edit(Pasien $pasien)
-{
-    $data['jauhOptions']      = Jauh::pluck('nama')->toArray();
-    $data['dekatOptions']     = Dekat::pluck('nama')->toArray();
-    $data['genetikOptions']   = Genetik::pluck('nama')->toArray();
-    $data['penyakitOptions']  = Penyakit::pluck('nama')->toArray(); // <-- aman walau tabel kosong
+    {
+        $data['jauhOptions']      = Jauh::pluck('nama')->toArray();
+        $data['dekatOptions']     = Dekat::pluck('nama')->toArray();
+        $data['genetikOptions']   = Genetik::pluck('nama')->toArray();
+        $data['penyakitOptions']  = Penyakit::pluck('nama')->toArray(); // <-- aman walau tabel kosong
 
-    // Ambil anamnesa pasien jika ada
-    $anamnesa = $pasien->anamnesa;
+        // Ambil anamnesa pasien jika ada
+        $anamnesa = $pasien->anamnesa;
 
-    // supaya tidak error kalau null
-    $selectedRiwayat = [];
+        // supaya tidak error kalau null
+        $selectedRiwayat = [];
 
-    if ($anamnesa) {
-        if (is_array($anamnesa->riwayat)) {
-            $selectedRiwayat = $anamnesa->riwayat;
-        } elseif (!empty($anamnesa->riwayat)) {
-            $selectedRiwayat = json_decode($anamnesa->riwayat, true) ?? [];
+        if ($anamnesa) {
+            if (is_array($anamnesa->riwayat)) {
+                $selectedRiwayat = $anamnesa->riwayat;
+            } elseif (!empty($anamnesa->riwayat)) {
+                $selectedRiwayat = json_decode($anamnesa->riwayat, true) ?? [];
+            }
         }
-    }
 
-    return view('pasien.edit', compact('pasien', 'anamnesa', 'selectedRiwayat') + $data);
-}
+        return view('pasien.edit', compact('pasien', 'anamnesa', 'selectedRiwayat') + $data);
+    }
 
 
 
@@ -107,14 +126,13 @@ class PasienController extends Controller
     public function update(Request $request, Pasien $pasien)
     {
         $request->validate([
+            'no_rm' => 'nullable|string|max:50|unique:pasien,no_rm,' . $pasien->id,
             'nama' => 'required|string|max:100',
             'usia' => 'required|string|max:25',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'pekerjaan' => 'required|string|max:100',
             'alamat' => 'required|string',
             'no_telp' => 'required|string|max:15',
-
-            // validasi anamnesa
             'jauh' => 'required|string',
             'dekat' => 'required|string',
             'gen' => 'required|string',
@@ -122,7 +140,11 @@ class PasienController extends Controller
             'riwayat.*' => 'string|max:255',
         ]);
 
-        $pasien->update($request->only(['nama', 'usia', 'jenis_kelamin', 'pekerjaan', 'alamat', 'no_telp']));
+
+        $pasien->update($request->only([
+            'no_rm', 'nama', 'usia', 'jenis_kelamin', 'pekerjaan', 'alamat', 'no_telp'
+        ]));
+
 
         // update anamnesa, jika tidak ada → create
         \App\Models\Anamnesa::updateOrCreate(

@@ -73,7 +73,7 @@
                     <tr>
                         <td>No. Rekam Medis</td>
                         <td>
-                            @foreach(str_split($pemeriksaan->id) as $digit)
+                            @foreach(str_split($pemeriksaan->pasien->no_rm) as $digit)
                             <div class="rekam-medis-box">{{ $digit }}</div>
                             @endforeach
                         </td>
@@ -285,6 +285,8 @@
 
 
                 <div style="margin-top: 5px; text-align: center;">
+                    <p style="margin: 0;">M FATHONI </p>
+                    <p style="margin: 0;">503/0005/064/D.VI.17/VI/2022 </p>
                     <p style="margin: 0;">Tanda Tangan RO</p>
                 </div>
             </div>

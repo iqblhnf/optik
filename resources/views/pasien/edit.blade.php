@@ -14,6 +14,13 @@
 
             <div class="card-body">
                 {{-- DATA PASIEN --}}
+
+                <div class="mb-3">
+                    <label class="form-label">No. Rekam Medis</label>
+                    <input type="number" name="no_rm" class="form-control"
+                        value="{{ old('no_rm', $pasien->no_rm) }}">
+                </div>
+
                 <div class="mb-3">
                     <label class="form-label">Nama Lengkap</label>
                     <input type="text" name="nama" class="form-control"

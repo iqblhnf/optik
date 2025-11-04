@@ -52,89 +52,7 @@
             </div>
         </div>
 
-        {{-- ========================================================= --}}
-        {{-- ==================== PEMERIKSAAN ALAT =================== --}}
-        {{-- ========================================================= --}}
-
-        <div class="alert alert-success fw-bold">PEMERIKSAAN ALAT (AUTO REFRACTOR)</div>
-
-        <div class="row">
-            {{-- OD --}}
-            <div class="col-md-6">
-                <div class="card border-success shadow-sm mb-3">
-                    <div class="card-header bg-success text-white">
-                        <h5 class="mb-0">OD (Mata Kanan)</h5>
-                    </div>
-                    <div class="card-body">
-
-                        {{-- DISTANCE --}}
-                        <div class="border rounded p-3 mb-3">
-                            <h6 class="text-success fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
-                            <div class="row g-3">
-                                @foreach (['sph','cyl','axis','prisma','base'] as $field)
-                                    <div class="col-md-4">
-                                        <label class="form-label">{{ strtoupper($field) }}</label>
-                                        @if ($field === 'axis')
-                                            <div class="input-group">
-                                                <input type="text" name="od_{{ $field }}" class="form-control">
-                                                <span class="input-group-text">°</span>
-                                            </div>
-                                        @else
-                                            <input type="text" name="od_{{ $field }}" class="form-control">
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- NEAR --}}
-                        <div class="border rounded p-3 bg-light">
-                            <h6 class="text-success fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
-                            <input type="text" name="od_add" class="form-control col-md-4">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- OS --}}
-            <div class="col-md-6">
-                <div class="card border-warning shadow-sm mb-3">
-                    <div class="card-header bg-warning">
-                        <h5 class="mb-0 text-dark">OS (Mata Kiri)</h5>
-                    </div>
-                    <div class="card-body">
-
-                        {{-- DISTANCE --}}
-                        <div class="border rounded p-3 mb-3">
-                            <h6 class="text-warning fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
-                            <div class="row g-3">
-                                @foreach (['sph','cyl','axis','prisma','base'] as $field)
-                                    <div class="col-md-4">
-                                        <label class="form-label">{{ strtoupper($field) }}</label>
-                                        @if ($field === 'axis')
-                                            <div class="input-group">
-                                                <input type="text" name="os_{{ $field }}" class="form-control">
-                                                <span class="input-group-text">°</span>
-                                            </div>
-                                        @else
-                                            <input type="text" name="os_{{ $field }}" class="form-control">
-                                        @endif
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-
-                        {{-- NEAR --}}
-                        <div class="border rounded p-3 bg-light">
-                            <h6 class="text-warning fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
-                            <input type="text" name="os_add" class="form-control col-md-4">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
+        
         {{-- ========================================================= --}}
         {{-- ================= PEMERIKSAAN PETUGAS ================== --}}
         {{-- ========================================================= --}}
@@ -218,6 +136,90 @@
         </div>
 
 
+        {{-- ========================================================= --}}
+        {{-- ==================== PEMERIKSAAN ALAT =================== --}}
+        {{-- ========================================================= --}}
+
+        <div class="alert alert-success fw-bold">PEMERIKSAAN ALAT (AUTO REFRACTOR)</div>
+
+        <div class="row">
+            {{-- OD --}}
+            <div class="col-md-6">
+                <div class="card border-success shadow-sm mb-3">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">OD (Mata Kanan)</h5>
+                    </div>
+                    <div class="card-body">
+
+                        {{-- DISTANCE --}}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="text-success fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
+                            <div class="row g-3">
+                                @foreach (['sph','cyl','axis','prisma','base'] as $field)
+                                    <div class="col-md-4">
+                                        <label class="form-label">{{ strtoupper($field) }}</label>
+                                        @if ($field === 'axis')
+                                            <div class="input-group">
+                                                <input type="text" name="od_{{ $field }}" class="form-control">
+                                                <span class="input-group-text">°</span>
+                                            </div>
+                                        @else
+                                            <input type="text" name="od_{{ $field }}" class="form-control">
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- NEAR --}}
+                        <div class="border rounded p-3 bg-light">
+                            <h6 class="text-success fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
+                            <input type="text" name="od_add" class="form-control col-md-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- OS --}}
+            <div class="col-md-6">
+                <div class="card border-warning shadow-sm mb-3">
+                    <div class="card-header bg-warning">
+                        <h5 class="mb-0 text-dark">OS (Mata Kiri)</h5>
+                    </div>
+                    <div class="card-body">
+
+                        {{-- DISTANCE --}}
+                        <div class="border rounded p-3 mb-3">
+                            <h6 class="text-warning fw-semibold"><i class="ti ti-eye"></i> DISTANCE (Jauh)</h6>
+                            <div class="row g-3">
+                                @foreach (['sph','cyl','axis','prisma','base'] as $field)
+                                    <div class="col-md-4">
+                                        <label class="form-label">{{ strtoupper($field) }}</label>
+                                        @if ($field === 'axis')
+                                            <div class="input-group">
+                                                <input type="text" name="os_{{ $field }}" class="form-control">
+                                                <span class="input-group-text">°</span>
+                                            </div>
+                                        @else
+                                            <input type="text" name="os_{{ $field }}" class="form-control">
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        {{-- NEAR --}}
+                        <div class="border rounded p-3 bg-light">
+                            <h6 class="text-warning fw-semibold"><i class="ti ti-eye-plus"></i> NEAR (Dekat)</h6>
+                            <input type="text" name="os_add" class="form-control col-md-4">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
         {{-- ================= LAINNYA ================= --}}
         <div class="card card-secondary card-outline mt-3">
             <div class="card-header">
@@ -240,7 +242,7 @@
                 </div>
 
                 <div class="mb-3 col-md-12">
-                    <label>Keterangan Kacamata Lama</label>
+                    <label>Keterangan</label>
                     <textarea name="keterangan_kacamata_lama" class="form-control"></textarea>
                 </div>
             </div>

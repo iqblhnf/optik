@@ -28,6 +28,7 @@
                             <thead class="table-light">
                                 <tr>
                                     <th style="width: 5%">#</th>
+                                    <th>No RM</th>
                                     <th>Nama</th>
                                     <th>Usia</th>
                                     <th>Jenis Kelamin</th>
@@ -41,6 +42,7 @@
                                 @foreach($data as $index => $pasien)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
+                                    <td>{{ $pasien->no_rm }}</td>
                                     <td>{{ $pasien->nama }}</td>
                                     <td>{{ $pasien->usia }}</td>
                                     <td>{{ $pasien->jenis_kelamin }}</td>
