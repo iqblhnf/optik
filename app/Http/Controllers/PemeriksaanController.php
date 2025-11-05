@@ -136,6 +136,12 @@ class PemeriksaanController extends Controller
         ->with('success', 'Data pemeriksaan berhasil ditambahkan.');
 }
 
+public function show($id)
+{
+    $pemeriksaan = Pemeriksaan::with('anamnesa.pasien')->findOrFail($id);
+    return view('pemeriksaan.partials.detail', compact('pemeriksaan'));
+}
+
 
     public function edit(Pemeriksaan $pemeriksaan)
     {
@@ -327,23 +333,79 @@ class PemeriksaanController extends Controller
 
 
     public function getAnamnesaPasien($id_pasien)
-    {
-        $anamnesa = Anamnesa::where('id_pasien', $id_pasien)
-            ->latest()
-            ->first();
+{
+    // 🔹 Ambil anamnesa terakhir
+    $anamnesa = Anamnesa::where('id_pasien', $id_pasien)
+        ->latest()
+        ->first();
 
-        return response()->json([
-            'id_anamnesa' => $anamnesa->id ?? null,  // ✅ tambahkan id anamnesa
+    // 🔹 Ambil pemeriksaan terakhir pasien ini
+    $pemeriksaanTerakhir = Pemeriksaan::whereHas('anamnesa', function ($q) use ($id_pasien) {
+            $q->where('id_pasien', $id_pasien);
+        })
+        ->latest()
+        ->first();
 
-            'jauh'    => $anamnesa->jauh ?? '-',
-            'dekat'   => $anamnesa->dekat ?? '-',
-            'gen'     => $anamnesa->gen ?? '-',
-            'riwayat' => $anamnesa->riwayat ?? '-',
-            'lainnya' => $anamnesa->lainnya ?? '-',
+    // 🔹 Ambil data pasien
+    $pasien = Pasien::find($id_pasien);
 
-            'exists'  => $anamnesa ? true : false
-        ]);
+    // 🔹 Tentukan sumber kacamata lama (sama seperti print)
+    $kacamataLama = [
+        'od_sph' => null, 'od_cyl' => null, 'od_axis' => null,
+        'od_prisma' => null, 'od_base' => null, 'od_add' => null,
+        'os_sph' => null, 'os_cyl' => null, 'os_axis' => null,
+        'os_prisma' => null, 'os_base' => null, 'os_add' => null,
+    ];
+
+    if ($pemeriksaanTerakhir) {
+        // ✅ Ambil dari pemeriksaan terakhir
+        $kacamataLama = [
+            'od_sph' => $pemeriksaanTerakhir->od_sph,
+            'od_cyl' => $pemeriksaanTerakhir->od_cyl,
+            'od_axis' => $pemeriksaanTerakhir->od_axis,
+            'od_prisma' => $pemeriksaanTerakhir->od_prisma,
+            'od_base' => $pemeriksaanTerakhir->od_base,
+            'od_add' => $pemeriksaanTerakhir->od_add,
+            'os_sph' => $pemeriksaanTerakhir->os_sph,
+            'os_cyl' => $pemeriksaanTerakhir->os_cyl,
+            'os_axis' => $pemeriksaanTerakhir->os_axis,
+            'os_prisma' => $pemeriksaanTerakhir->os_prisma,
+            'os_base' => $pemeriksaanTerakhir->os_base,
+            'os_add' => $pemeriksaanTerakhir->os_add,
+        ];
+    } elseif ($pasien) {
+        // ✅ Kalau belum pernah diperiksa, ambil dari pasien
+        $kacamataLama = [
+            'od_sph' => $pasien->od_sph,
+            'od_cyl' => $pasien->od_cyl,
+            'od_axis' => $pasien->od_axis,
+            'od_prisma' => $pasien->od_prisma,
+            'od_base' => $pasien->od_base,
+            'od_add' => $pasien->od_add,
+            'os_sph' => $pasien->os_sph,
+            'os_cyl' => $pasien->os_cyl,
+            'os_axis' => $pasien->os_axis,
+            'os_prisma' => $pasien->os_prisma,
+            'os_base' => $pasien->os_base,
+            'os_add' => $pasien->os_add,
+        ];
     }
+
+    return response()->json([
+        'id_anamnesa' => $anamnesa->id ?? null,
+        'jauh'    => $anamnesa->jauh ?? '-',
+        'dekat'   => $anamnesa->dekat ?? '-',
+        'gen'     => $anamnesa->gen ?? '-',
+        'riwayat' => $anamnesa->riwayat ?? '-',
+        'lainnya' => $anamnesa->lainnya ?? '-',
+
+        // 🔹 Tambahan tabel pemeriksaan kacamata lama
+        'kacamata_lama' => $kacamataLama,
+
+        'exists'  => $anamnesa ? true : false
+    ]);
+}
+
 
 
 }

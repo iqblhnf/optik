@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
         // Route::get('/pemeriksaan/riwayat/{id_pasien}', [PemeriksaanController::class, 'riwayat'])->name('pemeriksaan.riwayat');
         Route::get('/laporan', [PemeriksaanController::class, 'laporan'])->name('laporan');
         Route::get('/pemeriksaan/{id}/print', [PemeriksaanController::class, 'print'])->name('pemeriksaan.print');
+
         Route::resource('barang', BarangController::class);
         Route::resource('barang-masuk', BarangMasukController::class)->only(['index', 'store', 'destroy']);
         Route::resource('barang-keluar', BarangKeluarController::class)->only(['index', 'store', 'destroy']);
@@ -57,6 +58,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('pasien', PasienController::class);
         // Route::resource('anamnesa', AnamnesaController::class);
         Route::resource('pemeriksaan', PemeriksaanController::class);
+        
     });
 
     Route::middleware(['role:penjualan'])->group(function () {
@@ -66,4 +68,3 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/api/anamnesa/{id_pasien}', [PemeriksaanController::class, 'getAnamnesaPasien']);
-

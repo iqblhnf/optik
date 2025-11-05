@@ -306,6 +306,36 @@ document.addEventListener("DOMContentLoaded", function () {
                     </table>
                 `;
 
+                if (data.kacamata_lama) {
+                    let k = data.kacamata_lama;
+                    viewDiv.innerHTML += `
+                        <table class="table table-bordered mt-3">
+                            <thead class="table-light">
+                                <tr>
+                                    <th rowspan="2" class="text-center align-middle"> </th>
+                                    <th colspan="6" class="text-center">PEMERIKSAAN KACAMATA LAMA</th>
+                                </tr>
+                                <tr class="text-center">
+                                    <th>SPH</th><th>CYL</th><th>AXIS</th><th>PRISMA</th><th>BASE</th><th>ADD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="text-center">
+                                    <th>OD</th>
+                                    <td>${k.od_sph ?? '-'}</td><td>${k.od_cyl ?? '-'}</td><td>${k.od_axis ?? '-'}</td>
+                                    <td>${k.od_prisma ?? '-'}</td><td>${k.od_base ?? '-'}</td><td>${k.od_add ?? '-'}</td>
+                                </tr>
+                                <tr class="text-center">
+                                    <th>OS</th>
+                                    <td>${k.os_sph ?? '-'}</td><td>${k.os_cyl ?? '-'}</td><td>${k.os_axis ?? '-'}</td>
+                                    <td>${k.os_prisma ?? '-'}</td><td>${k.os_base ?? '-'}</td><td>${k.os_add ?? '-'}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    `;
+                }
+
+
                 // 🔹 Isi kembali input (jika ada form edit)
                 document.querySelector("input[name='gen']").value = data.gen ?? '';
                 document.querySelector("textarea[name='lainnya']").value = data.lainnya ?? '';
