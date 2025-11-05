@@ -18,14 +18,29 @@
 </div>
 
 <hr>
+@php
+    function showArray($value) {
+        if (is_array($value)) {
+            return implode(', ', $value);
+        }
 
-<h6 class="fw-bold">Anamnesa</h6>
+        // Kadang disimpan sebagai JSON string, maka decode dulu
+        if (is_string($value) && str_starts_with($value, '[')) {
+            $decoded = json_decode($value, true);
+            if (is_array($decoded)) return implode(', ', $decoded);
+        }
+
+        return $value ?? '-';
+    }
+@endphp
+
+<h6 class="fw-bold mt-3">Anamnesa</h6>
 <table class="table table-bordered">
-  <tr><th>Jarak Jauh</th><td>{{ $pemeriksaan->anamnesa->jauh }}</td></tr>
-  <tr><th>Jarak Dekat</th><td>{{ $pemeriksaan->anamnesa->dekat }}</td></tr>
-  <tr><th>Genetik</th><td>{{ $pemeriksaan->anamnesa->gen }}</td></tr>
-  <tr><th>Riwayat</th><td>{{ $pemeriksaan->anamnesa->riwayat }}</td></tr>
-  <tr><th>Keterangan</th><td>{{ $pemeriksaan->anamnesa->lainnya }}</td></tr>
+  <tr><th>Jarak Jauh</th><td>{{ showArray($pemeriksaan->anamnesa->jauh) }}</td></tr>
+  <tr><th>Jarak Dekat</th><td>{{ showArray($pemeriksaan->anamnesa->dekat) }}</td></tr>
+  <tr><th>Genetik</th><td>{{ showArray($pemeriksaan->anamnesa->gen) }}</td></tr>
+  <tr><th>Riwayat Penyakit</th><td>{{ showArray($pemeriksaan->anamnesa->riwayat) }}</td></tr>
+  <tr><th>Keterangan Tambahan</th><td>{{ showArray($pemeriksaan->anamnesa->lainnya) }}</td></tr>
 </table>
 
 <hr>
