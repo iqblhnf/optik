@@ -23,25 +23,19 @@
                         <th>JK</th>
                         <th>Alamat</th>
                         <th>Jumlah Pemeriksaan</th>
-                        {{-- <th class="text-center">Aksi</th> --}}
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($data as $index => $item)
                     @php $riwayatBase64 = base64_encode(json_encode($item['riwayat'])); @endphp
-                    <tr data-id="{{ $item['id'] }}" data-riwayat="{{ $riwayatBase64 }}">
-                        <td class="details-control text-center text-primary fw-bold" style="cursor:pointer;">▶️</td>
+                    <tr class="clickable-row" data-id="{{ $item['id'] }}" data-riwayat="{{ $riwayatBase64 }}">
+                        <td class="details-control text-center text-primary fw-bold">▶️</td>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $item['nama'] }}</td>
                         <td>{{ $item['usia'] }}</td>
                         <td>{{ $item['jenis_kelamin'] }}</td>
                         <td>{{ $item['alamat'] }}</td>
                         <td>{{ $item['jumlah_pemeriksaan'] }}</td>
-                        {{-- <td class="text-center">
-                            <button class="btn btn-sm btn-info text-white view-detail" data-id="{{ $item['id'] }}">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </td> --}}
                     </tr>
                     @endforeach
                 </tbody>
@@ -70,7 +64,8 @@
 <style>
 tr.shown { background-color: #f8fbff !important; }
 td.details-control { cursor: pointer; font-size: 18px; }
-td.details-control:hover { color: #0d6efd; }
+.clickable-row { cursor: pointer; }
+.clickable-row:hover { background-color: #eef6ff; }
 </style>
 
 <script>
@@ -134,7 +129,6 @@ function formatRiwayat(riwayat) {
     return html;
 }
 
-
 $(document).ready(function(){
     let table = $('#pemeriksaan').DataTable({
         responsive: true,
@@ -143,27 +137,46 @@ $(document).ready(function(){
         searching: true
     });
 
-    // Expand-collapse behavior
-    $('#pemeriksaan tbody').on('click', 'td.details-control', function () {
-        let tr = $(this).closest('tr');
+    let currentOpen = null; // simpan baris yang sedang terbuka
+
+    // Klik di baris manapun untuk toggle
+    $('#pemeriksaan tbody').on('click', 'tr.clickable-row', function (e) {
+        let tr = $(this);
         let row = table.row(tr);
         let id = tr.data('id');
         let riwayat = base64ToJson(tr.data('riwayat'));
         let icon = tr.find('td.details-control');
 
-        if (row.child.isShown()) {
+        // Abaikan klik tombol di dalam collapse/aksi
+        if ($(e.target).closest('button, a, form').length) return;
+
+        // Jika klik baris yang sama → tutup
+        if (currentOpen && currentOpen[0] === tr[0]) {
             row.child.hide();
             tr.removeClass('shown');
             icon.text('▶️');
-        } else {
-            row.child(formatRiwayat(riwayat)).show();
-            tr.addClass('shown');
-            icon.text('▼');
+            currentOpen = null;
+            return;
         }
+
+        // Tutup collapse lain jika sedang terbuka
+        if (currentOpen) {
+            let prevTr = currentOpen;
+            let prevRow = table.row(prevTr);
+            prevRow.child.hide();
+            prevTr.removeClass('shown');
+            prevTr.find('td.details-control').text('▶️');
+        }
+
+        // Buka collapse baru
+        row.child(formatRiwayat(riwayat)).show();
+        tr.addClass('shown');
+        icon.text('▼');
+        currentOpen = tr;
     });
 
-    // Modal detail (baik dari tombol luar maupun dari dalam riwayat)
-    $(document).on('click', '.view-detail, .view-detail-row', function(){
+    // Modal detail
+    $(document).on('click', '.view-detail-row', function(){
         const id = $(this).data('id');
         $('#modalDetail').modal('show');
         $('#detailContent').html('<div class="text-center py-4 text-muted"><div class="spinner-border text-primary mb-2"></div><br>Memuat data...</div>');
