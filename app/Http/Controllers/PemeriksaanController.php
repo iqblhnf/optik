@@ -392,18 +392,28 @@ public function show($id)
     }
 
     return response()->json([
-        'id_anamnesa' => $anamnesa->id ?? null,
-        'jauh'    => $anamnesa->jauh ?? '-',
-        'dekat'   => $anamnesa->dekat ?? '-',
-        'gen'     => $anamnesa->gen ?? '-',
-        'riwayat' => $anamnesa->riwayat ?? '-',
-        'lainnya' => $anamnesa->lainnya ?? '-',
+    'id_anamnesa' => $anamnesa->id ?? null,
+    'jauh'    => $anamnesa->jauh ?? '-',
+    'dekat'   => $anamnesa->dekat ?? '-',
+    'gen'     => $anamnesa->gen ?? '-',
+    'riwayat' => $anamnesa->riwayat ?? '-',
+    'lainnya' => $anamnesa->lainnya ?? '-',
 
-        // 🔹 Tambahan tabel pemeriksaan kacamata lama
-        'kacamata_lama' => $kacamataLama,
+    // 🔹 Tambahkan biodata pasien
+    'pasien' => [
+        'no_rm' => $pasien->no_rm ?? null,
+        'nama' => $pasien->nama ?? null,
+        'usia' => $pasien->usia ?? null,
+        'jenis_kelamin' => $pasien->jenis_kelamin ?? null,
+        'pekerjaan' => $pasien->pekerjaan ?? null,
+        'alamat' => $pasien->alamat ?? null,
+        'telepon' => $pasien->telepon ?? null,
+    ],
 
-        'exists'  => $anamnesa ? true : false
-    ]);
+    // 🔹 Data kacamata lama
+    'kacamata_lama' => $kacamataLama,
+    'exists'  => $anamnesa ? true : false
+]);
 }
 
 

@@ -290,13 +290,30 @@ document.addEventListener("DOMContentLoaded", function () {
                     return input;
                 };
 
-                // 🔹 Format tiap bagian
+                // 🔹 Format tiap bagian anamnesa
                 let jauhFormatted = parseToText(data.jauh);
                 let dekatFormatted = parseToText(data.dekat);
                 let riwayatFormatted = parseToText(data.riwayat);
 
-                // 🔹 Tampilkan di tabel
+                // 🔹 Ambil biodata pasien dari respons
+                const pasien = data.pasien || {};
+
+                // 🔹 Tampilkan di div
                 viewDiv.innerHTML = `
+                    <div class="mb-3">
+                        <h5 class="fw-bold"><i class="bi bi-person-vcard"></i> Biodata Pasien</h5>
+                        <table class="table table-bordered table-sm">
+                            <tr><th width="180">No. Rekam Medis</th><td>${pasien.no_rm ?? '-'}</td></tr>
+                            <tr><th>Nama Lengkap</th><td>${pasien.nama ?? '-'}</td></tr>
+                            <tr><th>Usia</th><td>${pasien.usia ? pasien.usia + ' tahun' : '-'}</td></tr>
+                            <tr><th>Jenis Kelamin</th><td>${pasien.jenis_kelamin ?? '-'}</td></tr>
+                            <tr><th>Pekerjaan</th><td>${pasien.pekerjaan ?? '-'}</td></tr>
+                            <tr><th>Alamat</th><td>${pasien.alamat ?? '-'}</td></tr>
+                            <tr><th>No. Telepon</th><td>${pasien.telepon ?? '-'}</td></tr>
+                        </table>
+                    </div>
+
+                    <h5 class="fw-bold"><i class="bi bi-clipboard2-pulse"></i> Anamnesa Pasien</h5>
                     <table class="table table-bordered">
                         <tr><th>Jarak Jauh</th><td>${jauhFormatted}</td></tr>
                         <tr><th>Jarak Dekat</th><td>${dekatFormatted}</td></tr>
@@ -306,6 +323,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     </table>
                 `;
 
+                // 🔹 Tambahkan tabel kacamata lama jika ada
                 if (data.kacamata_lama) {
                     let k = data.kacamata_lama;
                     viewDiv.innerHTML += `
@@ -336,6 +354,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
 
 
+
                 // 🔹 Isi kembali input (jika ada form edit)
                 document.querySelector("input[name='gen']").value = data.gen ?? '';
                 document.querySelector("textarea[name='lainnya']").value = data.lainnya ?? '';
@@ -359,7 +378,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     setSelectValues('riwayat', data.riwayat);
                 }
             })
-            .catch(err => console.error(err));
         });
 });
 </script>
