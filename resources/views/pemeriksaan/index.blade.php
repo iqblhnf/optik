@@ -93,12 +93,16 @@ function formatRiwayat(riwayat) {
                     <th>OS SPH</th>
                     <th>Waktu Mulai</th>
                     <th>Waktu Selesai</th>
-                    <th>Aksi</th>
+                    <th class="text-center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
     `;
+
     riwayat.forEach(r => {
+        const editUrl = `/pemeriksaan/${r.id}/edit`;
+        const printUrl = `/pemeriksaan/${r.id}/print`;
+        const deleteUrl = `/pemeriksaan/${r.id}`;
         html += `
             <tr>
                 <td>${r.tgl ?? '-'}</td>
@@ -111,8 +115,13 @@ function formatRiwayat(riwayat) {
                     <button class="btn btn-sm btn-info text-white view-detail-row" data-id="${r.id}">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <a href="/pemeriksaan/${r.id}/edit" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
-                    <form action="/pemeriksaan/${r.id}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
+                    <a href="${printUrl}" class="btn btn-sm btn-secondary" target="_blank">
+                        <i class="bi bi-printer"></i>
+                    </a>
+                    <a href="${editUrl}" class="btn btn-sm btn-warning">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <form action="${deleteUrl}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus?')">
                         @csrf @method('DELETE')
                         <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
                     </form>
@@ -120,9 +129,11 @@ function formatRiwayat(riwayat) {
             </tr>
         `;
     });
+
     html += '</tbody></table></div>';
     return html;
 }
+
 
 $(document).ready(function(){
     let table = $('#pemeriksaan').DataTable({
