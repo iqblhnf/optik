@@ -78,11 +78,14 @@ class PasienController extends Controller
             'od_axis' => $request->od_axis,
             'od_prisma' => $request->od_prisma,
             'od_base' => $request->od_base,
+            'od_add' => $request->od_add,
             'os_sph' => $request->os_sph,
             'os_cyl' => $request->os_cyl,
             'os_axis' => $request->os_axis,
             'os_prisma' => $request->os_prisma,
             'os_base' => $request->os_base,
+            'os_add' => $request->os_add,
+
         ]);
 
 
@@ -160,8 +163,8 @@ class PasienController extends Controller
 
         $pasien->update($request->only([
             'no_rm', 'nama', 'usia', 'jenis_kelamin', 'pekerjaan', 'alamat', 'no_telp',
-            'od_sph', 'od_cyl', 'od_axis', 'od_prisma', 'od_base',
-            'os_sph', 'os_cyl', 'os_axis', 'os_prisma', 'os_base',
+            'od_sph', 'od_cyl', 'od_axis', 'od_prisma', 'od_base', 'od_add',
+            'os_sph', 'os_cyl', 'os_axis', 'os_prisma', 'os_base', 'os_add',
         ]));
 
 

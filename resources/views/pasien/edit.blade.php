@@ -74,6 +74,7 @@
                     <th>AXIS</th>
                     <th>PRISMA</th>
                     <th>BASE</th>
+                    <th>ADD</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +85,7 @@
                     <td><input type="text" name="od_axis" class="form-control" value="{{ old('od_axis', $pasien->od_axis) }}"></td>
                     <td><input type="text" name="od_prisma" class="form-control" value="{{ old('od_prisma', $pasien->od_prisma) }}"></td>
                     <td><input type="text" name="od_base" class="form-control" value="{{ old('od_base', $pasien->od_base) }}"></td>
+                    <td><input type="text" name="od_add" class="form-control" value="{{ old('od_add', $pasien->od_add) }}"></td>
                 </tr>
                 <tr>
                     <th>OS (Kiri)</th>
@@ -92,6 +94,7 @@
                     <td><input type="text" name="os_axis" class="form-control" value="{{ old('os_axis', $pasien->os_axis) }}"></td>
                     <td><input type="text" name="os_prisma" class="form-control" value="{{ old('os_prisma', $pasien->os_prisma) }}"></td>
                     <td><input type="text" name="os_base" class="form-control" value="{{ old('os_base', $pasien->os_base) }}"></td>
+                    <td><input type="text" name="os_add" class="form-control" value="{{ old('os_add', $pasien->os_add) }}"></td>
                 </tr>
             </tbody>
         </table>
