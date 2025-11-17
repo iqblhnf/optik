@@ -61,7 +61,7 @@ class PemeriksaanController extends Controller
 
     public function create()
     {
-        $pasien = Pasien::orderBy('nama')->get();
+        $pasien = Pasien::orderBy('created_at', 'desc')->get();
 
         $data['jauhOptions'] = Jauh::pluck('nama');  // Ambil isi tabel `jauh`
         $data['dekatOptions'] = Dekat::pluck('nama'); // Ambil isi tabel `dekat`
